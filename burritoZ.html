@@ -181,8 +181,8 @@
       <!-- BASE Section -->
       <div class="category-header" data-i18n="categoryBase">BASE</div>
       
-      <!-- Tortilla 7 oz -->
-      <div class="ingredient" data-calories="240" data-protein="5" data-fat="6" data-carbs="40">
+      <!-- Tortilla 7 oz with special pricing attribute -->
+      <div class="ingredient" data-calories="240" data-protein="5" data-fat="6" data-carbs="40" data-special="tortilla">
         <div class="ingredient-info">
           <span data-i18n="ingredientTortilla">Tortilla (7 oz) - 240 cal, 5g protein, 6g fat, 40g carbs</span>
         </div>
@@ -194,8 +194,8 @@
         </div>
       </div>
       
-      <!-- 3 Corn Tacos -->
-      <div class="ingredient" data-calories="180" data-protein="6" data-fat="3" data-carbs="36">
+      <!-- 3 Corn Tacos with special pricing attribute -->
+      <div class="ingredient" data-calories="180" data-protein="6" data-fat="3" data-carbs="36" data-special="tacos">
         <div class="ingredient-info">
           <span data-i18n="ingredientTacos">3 Corn Tacos - 180 cal, 6g protein, 3g fat, 36g carbs</span>
         </div>
@@ -281,8 +281,7 @@
       <!-- TOPPINGS Section -->
       <div class="category-header" data-i18n="categoryToppings">TOPPINGS</div>
       
-      <!-- For the toppings below, add class "topping" to indicate non-paid toppings -->
-      <!-- Melted Cheese 3 oz (Paid topping, so no extra charge) -->
+      <!-- Paid topping: Melted Cheese -->
       <div class="ingredient topping" data-calories="200" data-protein="10" data-fat="15" data-carbs="8" data-price-single="75" data-price-double="75">
         <div class="ingredient-info">
           <span data-i18n="ingredientCheese">Melted Cheese (3 oz) - 200 cal, 10g protein, 15g fat, 8g carbs</span>
@@ -295,7 +294,7 @@
         </div>
       </div>
       
-      <!-- Pico de Gallo 4 oz (Non-paid topping) -->
+      <!-- Non-paid toppings: Pico de Gallo, Medium Salsa, Green Salsa, Lettuce, Mexican Cheese, Rosada -->
       <div class="ingredient topping" data-calories="20" data-protein="1" data-fat="0" data-carbs="5">
         <div class="ingredient-info">
           <span data-i18n="ingredientPico">Pico de Gallo (4 oz) - 20 cal, 1g protein, 0g fat, 5g carbs</span>
@@ -308,7 +307,6 @@
         </div>
       </div>
       
-      <!-- Medium Salsa 3 oz (Non-paid topping) -->
       <div class="ingredient topping" data-calories="25" data-protein="1" data-fat="0" data-carbs="6">
         <div class="ingredient-info">
           <span data-i18n="ingredientMediumSalsa">Medium Salsa (3 oz) - 25 cal, 1g protein, 0g fat, 6g carbs</span>
@@ -321,7 +319,6 @@
         </div>
       </div>
       
-      <!-- Green Salsa 1 oz (Non-paid topping) -->
       <div class="ingredient topping" data-calories="10" data-protein="0.3" data-fat="0.5" data-carbs="2">
         <div class="ingredient-info">
           <span data-i18n="ingredientGreenSalsa">Green Salsa (1 oz) - 10 cal, 0.3g protein, 0.5g fat, 2g carbs</span>
@@ -334,7 +331,7 @@
         </div>
       </div>
       
-      <!-- Guacamole 3 oz (Paid topping, so no extra charge) -->
+      <!-- Paid topping: Guacamole -->
       <div class="ingredient topping" data-calories="150" data-protein="2" data-fat="13" data-carbs="8" data-price-single="50" data-price-double="50">
         <div class="ingredient-info">
           <span data-i18n="ingredientGuacamole">Guacamole (3 oz) - 150 cal, 2g protein, 13g fat, 8g carbs</span>
@@ -347,7 +344,6 @@
         </div>
       </div>
       
-      <!-- Lettuce 2 oz (Non-paid topping) -->
       <div class="ingredient topping" data-calories="10" data-protein="1" data-fat="0" data-carbs="2">
         <div class="ingredient-info">
           <span data-i18n="ingredientLettuce">Lettuce (2 oz) - 10 cal, 1g protein, 0g fat, 2g carbs</span>
@@ -360,7 +356,6 @@
         </div>
       </div>
       
-      <!-- Mexican Cheese 1 oz (Non-paid topping) -->
       <div class="ingredient topping" data-calories="100" data-protein="7" data-fat="8" data-carbs="1">
         <div class="ingredient-info">
           <span data-i18n="ingredientMexCheese">Mexican Cheese (1 oz) - 100 cal, 7g protein, 8g fat, 1g carb</span>
@@ -373,7 +368,6 @@
         </div>
       </div>
       
-      <!-- Rosada 1 oz (Non-paid topping) -->
       <div class="ingredient topping" data-calories="80" data-protein="0" data-fat="7" data-carbs="4">
         <div class="ingredient-info">
           <span data-i18n="ingredientRosada">Rosada (1 oz) - 80 cal, 0g protein, 7g fat, 4g carbs</span>
@@ -396,9 +390,10 @@
   </div>
 
   <script>
-    // Global current language (default: English)
+    // Global current language (default: English) and meal type variable
     let currentLanguage = "en";
-
+    let currentMealType = "";
+    
     // Translations Dictionary
     const translations = {
       en: {
@@ -520,51 +515,55 @@
      ************************************************/
     document.querySelectorAll('input[name="meal-type"]').forEach(radio => {
       radio.addEventListener('change', function() {
-        const mealType = this.value;
-        if (mealType === "burrito") {
+        currentMealType = this.value;
+        if (currentMealType === "burrito") {
+          // Burrito: select single tortilla, single rice, single beans; uncheck tacos.
           setRadio("tortilla-simple", true);
-          setRadio("tortilla-doble", false);
+          setRadio("tortilla-double", false);
           setRadio("white-rice-simple", true);
-          setRadio("white-rice-doble", false);
+          setRadio("white-rice-double", false);
           setRadio("red-beans-simple", true);
-          setRadio("red-beans-doble", false);
+          setRadio("red-beans-double", false);
           setRadio("tacos-simple", false);
-          setRadio("tacos-doble", false);
-        } else if (mealType === "bowl") {
+          setRadio("tacos-double", false);
+        } else if (currentMealType === "bowl") {
+          // Bowl: no tortilla or tacos; double rice, single beans.
           setRadio("tortilla-simple", false);
-          setRadio("tortilla-doble", false);
+          setRadio("tortilla-double", false);
           setRadio("tacos-simple", false);
-          setRadio("tacos-doble", false);
+          setRadio("tacos-double", false);
           setRadio("white-rice-simple", false);
-          setRadio("white-rice-doble", true);
+          setRadio("white-rice-double", true);
           setRadio("red-beans-simple", true);
-          setRadio("red-beans-doble", false);
-        } else if (mealType === "tacos") {
+          setRadio("red-beans-double", false);
+        } else if (currentMealType === "tacos") {
+          // Tacos: no tortilla or rice; single tacos, single beans.
           setRadio("tortilla-simple", false);
-          setRadio("tortilla-doble", false);
+          setRadio("tortilla-double", false);
           setRadio("white-rice-simple", false);
-          setRadio("white-rice-doble", false);
+          setRadio("white-rice-double", false);
           setRadio("tacos-simple", true);
-          setRadio("tacos-doble", false);
+          setRadio("tacos-double", false);
           setRadio("red-beans-simple", true);
-          setRadio("red-beans-doble", false);
-        } else if (mealType === "salad") {
+          setRadio("red-beans-double", false);
+        } else if (currentMealType === "salad") {
+          // Salad: no tortilla, tacos, or rice; single beans, double lettuce.
           setRadio("tortilla-simple", false);
-          setRadio("tortilla-doble", false);
+          setRadio("tortilla-double", false);
           setRadio("tacos-simple", false);
-          setRadio("tacos-doble", false);
+          setRadio("tacos-double", false);
           setRadio("white-rice-simple", false);
-          setRadio("white-rice-doble", false);
+          setRadio("white-rice-double", false);
           setRadio("red-beans-simple", true);
-          setRadio("red-beans-doble", false);
+          setRadio("red-beans-double", false);
           setRadio("lettuce-simple", false);
-          setRadio("lettuce-doble", true);
+          setRadio("lettuce-double", true);
         }
         calculateTotals();
       });
     });
 
-    // Helper to set radio button state by id
+    // Helper function to set a radio button's state by its id
     function setRadio(id, state) {
       const radio = document.getElementById(id);
       if (!radio) return;
@@ -591,7 +590,32 @@
           totalProtein  += multiplier * parseFloat(ingredient.getAttribute('data-protein'));
           totalFat      += multiplier * parseFloat(ingredient.getAttribute('data-fat'));
           totalCarbs    += multiplier * parseFloat(ingredient.getAttribute('data-carbs'));
-          if (ingredient.hasAttribute('data-price-single')) {
+
+          // Special pricing for tortilla and tacos
+          if (ingredient.hasAttribute("data-special")) {
+            const specialType = ingredient.getAttribute("data-special");
+            if (specialType === "tortilla") {
+              if (currentMealType === "burrito") {
+                // For burrito, single is free, double adds $12
+                if (multiplier === 2) totalPrice += 12;
+              } else {
+                // For other meals: single adds $12, double adds $24
+                if (multiplier === 1) totalPrice += 12;
+                else if (multiplier === 2) totalPrice += 24;
+              }
+            } else if (specialType === "tacos") {
+              if (currentMealType === "tacos") {
+                // For tacos meal, single is free, double adds $12
+                if (multiplier === 2) totalPrice += 12;
+              } else {
+                // For other meals: single adds $12, double adds $24
+                if (multiplier === 1) totalPrice += 12;
+                else if (multiplier === 2) totalPrice += 24;
+              }
+            }
+          }
+          // If the ingredient is a paid item (has pricing data), use its pricing.
+          else if (ingredient.hasAttribute('data-price-single')) {
             const priceSingle = parseFloat(ingredient.getAttribute('data-price-single'));
             if (multiplier === 1) {
               totalPrice += priceSingle;
@@ -599,13 +623,6 @@
               const priceDouble = parseFloat(ingredient.getAttribute('data-price-double') || 0);
               totalPrice += (priceSingle + priceDouble);
             }
-          }
-          // If this ingredient is in the TOPPINGS section (has class "topping")
-          // and is a non-paid topping (no data-price-single attribute),
-          // then if doubled add an extra 25.
-          if (ingredient.classList.contains("topping") && 
-              !ingredient.hasAttribute("data-price-single") && multiplier === 2) {
-            totalPrice += 25;
           }
         }
       });
