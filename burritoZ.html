@@ -5,6 +5,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title data-i18n="headerTitle">Macro & Price Calculator</title>
   <style>
+    /* Global Reset */
+    * {
+      box-sizing: border-box;
+    }
     /* Overall Color Scheme:
        - Background: Beige/Tostado (#F4ECC2)
        - Fixed Header: Bright Orange (#F5841A) with black text
@@ -40,12 +44,12 @@
       font-size: 1.5em;
       font-weight: bold;
     }
-    /* Language Toggle Switch Styles */
+    /* Language Toggle Switch */
     .language-toggle {
       display: flex;
       align-items: center;
       gap: 8px;
-      margin-right: 50px;  /* Shift 50px to the left relative to the right edge */
+      margin-right: 50px;  /* Adjust position */
       font-weight: bold;
       font-size: 0.9em;
       color: #000;
@@ -83,19 +87,16 @@
       transition: .4s;
       border-radius: 50%;
     }
-    /* When checked, use the classic iPhone green (#34C759) */
     .switch input:checked + .slider {
       background-color: #34C759;
     }
     .switch input:checked + .slider:before {
       transform: translateX(26px);
     }
-    /* End Language Toggle Styles */
-
-    /* Add top margin to avoid overlap with fixed header */
+    /* Calculator container */
     .calculator-container {
       max-width: 900px;
-      margin: 100px auto 40px auto;
+      margin: 100px auto 40px auto; /* Top margin added for fixed header */
       background: #fff;
       box-shadow: 0 4px 8px rgba(0,0,0,0.1);
       border-radius: 10px;
@@ -115,6 +116,7 @@
     }
     .ingredient {
       display: flex;
+      flex-wrap: wrap; /* Allow wrapping on small screens */
       justify-content: space-between;
       align-items: center;
       padding: 15px 10px;
@@ -124,13 +126,12 @@
       border-bottom: none;
     }
     .ingredient-info {
-      flex: 1;
-    }
-    .ingredient-info span {
-      display: block;
+      flex: 1 1 100%;
+      margin-bottom: 8px;
     }
     .serving-options {
       display: flex;
+      flex-wrap: wrap;
       gap: 10px;
       align-items: center;
     }
@@ -153,7 +154,6 @@
     .serving-options label:hover {
       background-color: rgba(245, 132, 26, 0.15);
     }
-    /* When a radio is checked, its label appears active */
     input[type="radio"]:checked + label {
       background-color: #F5841A;
       color: #fff;
@@ -168,6 +168,23 @@
     .totals p {
       margin: 8px 0;
       font-weight: bold;
+    }
+    /* Responsive adjustments for small screens */
+    @media (max-width: 600px) {
+      .header {
+        flex-direction: column;
+        text-align: center;
+      }
+      .language-toggle {
+        margin-right: 0;
+        margin-top: 10px;
+      }
+      .serving-options {
+        justify-content: center;
+      }
+      .ingredient-info {
+        margin-bottom: 10px;
+      }
     }
   </style>
 </head>
@@ -431,7 +448,7 @@
     // Translations dictionary
     const translations = {
       en: {
-        headerTitle: "MacroTrack",
+        headerTitle: "Macro & Price Calculator",
         headerSubtitle: "Select your serving size (Single or Double) for each ingredient",
         categoryMealType: "MEAL TYPE",
         mealTypeSelect: "Select your main meal",
@@ -467,7 +484,7 @@
         brandName: "Burrito Z"
       },
       es: {
-        headerTitle: "MacroTrack",
+        headerTitle: "Calculadora de Macro y Precio",
         headerSubtitle: "Seleccione el tamaño de la porción (Simple o Doble) para cada ingrediente",
         categoryMealType: "TIPO DE COMIDA",
         mealTypeSelect: "Seleccione su comida principal",
