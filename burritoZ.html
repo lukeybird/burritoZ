@@ -1,15 +1,15 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Calculadora de Macro y Precio - Burrito Z</title>
+  <title data-i18n="headerTitle">Macro & Price Calculator</title>
   <style>
-    /* Paleta inspirada en tus gráficas:
-       - Fondo tostado/beige (#F4ECC2)
-       - Encabezados naranja (#F5841A)
-       - Texto negro (#000)
-       - Botones con borde naranja */
+    /* Color scheme inspired by your graphics:
+       - Beige/tostado background (#F4ECC2)
+       - Headers in bright orange (#F5841A)
+       - Text in black (#000)
+       - Buttons with orange borders */
     body {
       margin: 0;
       padding: 0;
@@ -30,6 +30,7 @@
       color: #000;
       padding: 20px;
       text-align: center;
+      position: relative;
     }
     .header h1 {
       margin: 0;
@@ -38,6 +39,17 @@
     .header p {
       margin: 5px 0 0;
       font-size: 1em;
+    }
+    .language-toggle {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      font-size: 0.9em;
+      font-weight: bold;
+    }
+    .language-toggle label {
+      margin-right: 8px;
+      cursor: pointer;
     }
     .content {
       padding: 20px;
@@ -72,11 +84,11 @@
       gap: 10px;
       align-items: center;
     }
-    /* Ocultamos los radio buttons tradicionales */
+    /* Hide traditional radio buttons */
     input[type="radio"] {
       display: none;
     }
-    /* Estilo de "botón" para las etiquetas */
+    /* Style labels as sleek buttons */
     .serving-options label {
       padding: 8px 16px;
       border: 2px solid #F5841A;
@@ -91,7 +103,7 @@
     .serving-options label:hover {
       background-color: rgba(245, 132, 26, 0.15);
     }
-    /* Cuando el radio está marcado, la etiqueta se estiliza como "activo" */
+    /* When a radio is checked, its label appears active */
     input[type="radio"]:checked + label {
       background-color: #F5841A;
       color: #fff;
@@ -112,115 +124,116 @@
 <body>
   <div class="calculator-container">
     <div class="header">
-      <h1>Calculadora de Macro y Precio</h1>
-      <p>Elija el tamaño de la porción (Simple o Doble) para cada ingrediente</p>
+      <h1 data-i18n="headerTitle">Macro & Price Calculator</h1>
+      <p data-i18n="headerSubtitle">Select your serving size (Single or Double) for each ingredient</p>
+      <div class="language-toggle">
+        <label for="lang-toggle" data-i18n="languageLabel">Language:</label>
+        <input type="checkbox" id="lang-toggle">
+        <span id="lang-status" data-i18n="languageStatus">English</span>
+      </div>
     </div>
     <div class="content">
-
-      <!-- Sección: Tipo de Comida -->
-      <div class="category-header">TIPO DE COMIDA</div>
+      <!-- Meal Type Section -->
+      <div class="category-header" data-i18n="categoryMealType">MEAL TYPE</div>
       <div class="ingredient" id="meal-type-container">
         <div class="ingredient-info">
-          <span>Seleccione su comida principal</span>
+          <span data-i18n="mealTypeSelect">Select your main meal</span>
         </div>
         <div class="serving-options">
           <input type="radio" name="meal-type" id="meal-burrito" value="burrito">
-          <label for="meal-burrito">Burrito</label>
-
+          <label for="meal-burrito" data-i18n="mealBurrito">Burrito</label>
           <input type="radio" name="meal-type" id="meal-bowl" value="bowl">
-          <label for="meal-bowl">Bowl</label>
-
+          <label for="meal-bowl" data-i18n="mealBowl">Bowl</label>
           <input type="radio" name="meal-type" id="meal-tacos" value="tacos">
-          <label for="meal-tacos">3 Tacos</label>
-
+          <label for="meal-tacos" data-i18n="mealTacos">3 Tacos</label>
           <input type="radio" name="meal-type" id="meal-salad" value="salad">
-          <label for="meal-salad">Ensalada</label>
+          <label for="meal-salad" data-i18n="mealSalad">Salad</label>
         </div>
       </div>
 
-      <!-- Sección: La Base -->
-      <div class="category-header">LA BASE</div>
+      <!-- BASE Section -->
+      <div class="category-header" data-i18n="categoryBase">BASE</div>
       
       <!-- Tortilla 7 oz -->
       <div class="ingredient" data-calories="240" data-protein="5" data-fat="6" data-carbs="40">
         <div class="ingredient-info">
-          <span>Tortilla (7 oz) - 240 cal, 5g proteína, 6g grasa, 40g carbohidratos</span>
+          <span data-i18n="ingredientTortilla">Tortilla (7 oz) - 240 cal, 5g protein, 6g fat, 40g carbs</span>
         </div>
         <div class="serving-options">
           <input type="radio" name="serving-tortilla" id="tortilla-simple" class="serving-radio" value="1">
-          <label for="tortilla-simple">Simple</label>
-          <input type="radio" name="serving-tortilla" id="tortilla-doble" class="serving-radio" value="2">
-          <label for="tortilla-doble">Doble</label>
+          <label for="tortilla-simple" data-i18n="servingSingle">Single</label>
+          <input type="radio" name="serving-tortilla" id="tortilla-double" class="serving-radio" value="2">
+          <label for="tortilla-double" data-i18n="servingDouble">Double</label>
         </div>
       </div>
       
-      <!-- Tacos de maíz (3 piezas) -->
+      <!-- 3 Corn Tacos -->
       <div class="ingredient" data-calories="180" data-protein="6" data-fat="3" data-carbs="36">
         <div class="ingredient-info">
-          <span>Tacos de maíz (3 piezas) - 180 cal, 6g proteína, 3g grasa, 36g carbohidratos</span>
+          <span data-i18n="ingredientTacos">3 Corn Tacos - 180 cal, 6g protein, 3g fat, 36g carbs</span>
         </div>
         <div class="serving-options">
           <input type="radio" name="serving-tacos" id="tacos-simple" class="serving-radio" value="1">
-          <label for="tacos-simple">Simple</label>
-          <input type="radio" name="serving-tacos" id="tacos-doble" class="serving-radio" value="2">
-          <label for="tacos-doble">Doble</label>
+          <label for="tacos-simple" data-i18n="servingSingle">Single</label>
+          <input type="radio" name="serving-tacos" id="tacos-double" class="serving-radio" value="2">
+          <label for="tacos-double" data-i18n="servingDouble">Double</label>
         </div>
       </div>
       
-      <!-- Arroz blanco 3 oz -->
+      <!-- White Rice 3 oz -->
       <div class="ingredient" data-calories="131" data-protein="2.3" data-fat="2.7" data-carbs="24.1">
         <div class="ingredient-info">
-          <span>Arroz blanco (3 oz) - 131 cal, 2.3g proteína, 2.7g grasa, 24.1g carbohidratos</span>
+          <span data-i18n="ingredientRice">White Rice (3 oz) - 131 cal, 2.3g protein, 2.7g fat, 24.1g carbs</span>
         </div>
         <div class="serving-options">
           <input type="radio" name="serving-white-rice" id="white-rice-simple" class="serving-radio" value="1">
-          <label for="white-rice-simple">Simple</label>
-          <input type="radio" name="serving-white-rice" id="white-rice-doble" class="serving-radio" value="2">
-          <label for="white-rice-doble">Doble</label>
+          <label for="white-rice-simple" data-i18n="servingSingle">Single</label>
+          <input type="radio" name="serving-white-rice" id="white-rice-double" class="serving-radio" value="2">
+          <label for="white-rice-double" data-i18n="servingDouble">Double</label>
         </div>
       </div>
       
-      <!-- Frijoles rojos 3 oz -->
+      <!-- Red Beans 3 oz -->
       <div class="ingredient" data-calories="110" data-protein="7" data-fat="0.5" data-carbs="20">
         <div class="ingredient-info">
-          <span>Frijoles rojos (3 oz) - 110 cal, 7g proteína, 0.5g grasa, 20g carbohidratos</span>
+          <span data-i18n="ingredientBeans">Red Beans (3 oz) - 110 cal, 7g protein, 0.5g fat, 20g carbs</span>
         </div>
         <div class="serving-options">
           <input type="radio" name="serving-red-beans" id="red-beans-simple" class="serving-radio" value="1">
-          <label for="red-beans-simple">Simple</label>
-          <input type="radio" name="serving-red-beans" id="red-beans-doble" class="serving-radio" value="2">
-          <label for="red-beans-doble">Doble</label>
+          <label for="red-beans-simple" data-i18n="servingSingle">Single</label>
+          <input type="radio" name="serving-red-beans" id="red-beans-double" class="serving-radio" value="2">
+          <label for="red-beans-double" data-i18n="servingDouble">Double</label>
         </div>
       </div>
       
-      <!-- Sección: La Proteína -->
-      <div class="category-header">LA PROTEÍNA</div>
+      <!-- PROTEIN Section -->
+      <div class="category-header" data-i18n="categoryProtein">PROTEIN</div>
       
-      <!-- Pollo 4 oz -->
+      <!-- Chicken 4 oz -->
       <div class="ingredient" data-calories="124" data-protein="26" data-fat="3" data-carbs="0"
            data-price-single="50" data-price-double="50">
         <div class="ingredient-info">
-          <span>Pollo (4 oz) - 124 cal, 26g proteína, 3g grasa, 0g carbohidratos</span>
+          <span data-i18n="ingredientChicken">Chicken (4 oz) - 124 cal, 26g protein, 3g fat, 0g carbs</span>
         </div>
         <div class="serving-options">
           <input type="radio" name="serving-chicken" id="chicken-simple" class="serving-radio" value="1">
-          <label for="chicken-simple">Simple</label>
-          <input type="radio" name="serving-chicken" id="chicken-doble" class="serving-radio" value="2">
-          <label for="chicken-doble">Doble</label>
+          <label for="chicken-simple" data-i18n="servingSingle">Single</label>
+          <input type="radio" name="serving-chicken" id="chicken-double" class="serving-radio" value="2">
+          <label for="chicken-double" data-i18n="servingDouble">Double</label>
         </div>
       </div>
       
-      <!-- Carne de res 4 oz -->
+      <!-- Steak 4 oz -->
       <div class="ingredient" data-calories="200" data-protein="23" data-fat="12" data-carbs="0"
            data-price-single="110" data-price-double="110">
         <div class="ingredient-info">
-          <span>Carne de res (4 oz) - 200 cal, 23g proteína, 12g grasa, 0g carbohidratos</span>
+          <span data-i18n="ingredientSteak">Steak (4 oz) - 200 cal, 23g protein, 12g fat, 0g carbs</span>
         </div>
         <div class="serving-options">
           <input type="radio" name="serving-steak" id="steak-simple" class="serving-radio" value="1">
-          <label for="steak-simple">Simple</label>
-          <input type="radio" name="serving-steak" id="steak-doble" class="serving-radio" value="2">
-          <label for="steak-doble">Doble</label>
+          <label for="steak-simple" data-i18n="servingSingle">Single</label>
+          <input type="radio" name="serving-steak" id="steak-double" class="serving-radio" value="2">
+          <label for="steak-double" data-i18n="servingDouble">Double</label>
         </div>
       </div>
       
@@ -228,69 +241,69 @@
       <div class="ingredient" data-calories="150" data-protein="22" data-fat="7" data-carbs="0"
            data-price-single="110" data-price-double="110">
         <div class="ingredient-info">
-          <span>Barbacoa (4 oz) - 150 cal, 22g proteína, 7g grasa, 0g carbohidratos</span>
+          <span data-i18n="ingredientBarbacoa">Barbacoa (4 oz) - 150 cal, 22g protein, 7g fat, 0g carbs</span>
         </div>
         <div class="serving-options">
           <input type="radio" name="serving-barbacoa" id="barbacoa-simple" class="serving-radio" value="1">
-          <label for="barbacoa-simple">Simple</label>
-          <input type="radio" name="serving-barbacoa" id="barbacoa-doble" class="serving-radio" value="2">
-          <label for="barbacoa-doble">Doble</label>
+          <label for="barbacoa-simple" data-i18n="servingSingle">Single</label>
+          <input type="radio" name="serving-barbacoa" id="barbacoa-double" class="serving-radio" value="2">
+          <label for="barbacoa-double" data-i18n="servingDouble">Double</label>
         </div>
       </div>
       
-      <!-- Sección: Aderezos -->
-      <div class="category-header">ADEREZOS</div>
+      <!-- TOPPINGS Section -->
+      <div class="category-header" data-i18n="categoryToppings">TOPPINGS</div>
       
-      <!-- Queso fundido 3 oz -->
+      <!-- Melted Cheese 3 oz -->
       <div class="ingredient" data-calories="200" data-protein="10" data-fat="15" data-carbs="8"
            data-price-single="75" data-price-double="75">
         <div class="ingredient-info">
-          <span>Queso fundido (3 oz) - 200 cal, 10g proteína, 15g grasa, 8g carbohidratos</span>
+          <span data-i18n="ingredientCheese">Melted Cheese (3 oz) - 200 cal, 10g protein, 15g fat, 8g carbs</span>
         </div>
         <div class="serving-options">
           <input type="radio" name="serving-hot-queso" id="hot-queso-simple" class="serving-radio" value="1">
-          <label for="hot-queso-simple">Simple</label>
-          <input type="radio" name="serving-hot-queso" id="hot-queso-doble" class="serving-radio" value="2">
-          <label for="hot-queso-doble">Doble</label>
+          <label for="hot-queso-simple" data-i18n="servingSingle">Single</label>
+          <input type="radio" name="serving-hot-queso" id="hot-queso-double" class="serving-radio" value="2">
+          <label for="hot-queso-double" data-i18n="servingDouble">Double</label>
         </div>
       </div>
       
-      <!-- Pico de gallo 4 oz -->
+      <!-- Pico de Gallo 4 oz -->
       <div class="ingredient" data-calories="20" data-protein="1" data-fat="0" data-carbs="5">
         <div class="ingredient-info">
-          <span>Pico de gallo (4 oz) - 20 cal, 1g proteína, 0g grasa, 5g carbohidratos</span>
+          <span data-i18n="ingredientPico">Pico de Gallo (4 oz) - 20 cal, 1g protein, 0g fat, 5g carbs</span>
         </div>
         <div class="serving-options">
           <input type="radio" name="serving-pico-de-gallo" id="pico-de-gallo-simple" class="serving-radio" value="1">
-          <label for="pico-de-gallo-simple">Simple</label>
-          <input type="radio" name="serving-pico-de-gallo" id="pico-de-gallo-doble" class="serving-radio" value="2">
-          <label for="pico-de-gallo-doble">Doble</label>
+          <label for="pico-de-gallo-simple" data-i18n="servingSingle">Single</label>
+          <input type="radio" name="serving-pico-de-gallo" id="pico-de-gallo-double" class="serving-radio" value="2">
+          <label for="pico-de-gallo-double" data-i18n="servingDouble">Double</label>
         </div>
       </div>
       
-      <!-- Salsa mediana 3 oz -->
+      <!-- Medium Salsa 3 oz -->
       <div class="ingredient" data-calories="25" data-protein="1" data-fat="0" data-carbs="6">
         <div class="ingredient-info">
-          <span>Salsa mediana (3 oz) - 25 cal, 1g proteína, 0g grasa, 6g carbohidratos</span>
+          <span data-i18n="ingredientMediumSalsa">Medium Salsa (3 oz) - 25 cal, 1g protein, 0g fat, 6g carbs</span>
         </div>
         <div class="serving-options">
           <input type="radio" name="serving-medium-salsa" id="medium-salsa-simple" class="serving-radio" value="1">
-          <label for="medium-salsa-simple">Simple</label>
-          <input type="radio" name="serving-medium-salsa" id="medium-salsa-doble" class="serving-radio" value="2">
-          <label for="medium-salsa-doble">Doble</label>
+          <label for="medium-salsa-simple" data-i18n="servingSingle">Single</label>
+          <input type="radio" name="serving-medium-salsa" id="medium-salsa-double" class="serving-radio" value="2">
+          <label for="medium-salsa-double" data-i18n="servingDouble">Double</label>
         </div>
       </div>
       
-      <!-- Salsa verde 1 oz -->
+      <!-- Green Salsa 1 oz -->
       <div class="ingredient" data-calories="10" data-protein="0.3" data-fat="0.5" data-carbs="2">
         <div class="ingredient-info">
-          <span>Salsa verde (1 oz) - 10 cal, 0.3g proteína, 0.5g grasa, 2g carbohidratos</span>
+          <span data-i18n="ingredientGreenSalsa">Green Salsa (1 oz) - 10 cal, 0.3g protein, 0.5g fat, 2g carbs</span>
         </div>
         <div class="serving-options">
           <input type="radio" name="serving-salsa-verde" id="salsa-verde-simple" class="serving-radio" value="1">
-          <label for="salsa-verde-simple">Simple</label>
-          <input type="radio" name="serving-salsa-verde" id="salsa-verde-doble" class="serving-radio" value="2">
-          <label for="salsa-verde-doble">Doble</label>
+          <label for="salsa-verde-simple" data-i18n="servingSingle">Single</label>
+          <input type="radio" name="serving-salsa-verde" id="salsa-verde-double" class="serving-radio" value="2">
+          <label for="salsa-verde-double" data-i18n="servingDouble">Double</label>
         </div>
       </div>
       
@@ -298,66 +311,170 @@
       <div class="ingredient" data-calories="150" data-protein="2" data-fat="13" data-carbs="8"
            data-price-single="50" data-price-double="50">
         <div class="ingredient-info">
-          <span>Guacamole (3 oz) - 150 cal, 2g proteína, 13g grasa, 8g carbohidratos</span>
+          <span data-i18n="ingredientGuacamole">Guacamole (3 oz) - 150 cal, 2g protein, 13g fat, 8g carbs</span>
         </div>
         <div class="serving-options">
           <input type="radio" name="serving-guacamole" id="guacamole-simple" class="serving-radio" value="1">
-          <label for="guacamole-simple">Simple</label>
-          <input type="radio" name="serving-guacamole" id="guacamole-doble" class="serving-radio" value="2">
-          <label for="guacamole-doble">Doble</label>
+          <label for="guacamole-simple" data-i18n="servingSingle">Single</label>
+          <input type="radio" name="serving-guacamole" id="guacamole-double" class="serving-radio" value="2">
+          <label for="guacamole-double" data-i18n="servingDouble">Double</label>
         </div>
       </div>
       
-      <!-- Lechuga 2 oz -->
+      <!-- Lettuce 2 oz -->
       <div class="ingredient" data-calories="10" data-protein="1" data-fat="0" data-carbs="2">
         <div class="ingredient-info">
-          <span>Lechuga (2 oz) - 10 cal, 1g proteína, 0g grasa, 2g carbohidratos</span>
+          <span data-i18n="ingredientLettuce">Lettuce (2 oz) - 10 cal, 1g protein, 0g fat, 2g carbs</span>
         </div>
         <div class="serving-options">
           <input type="radio" name="serving-lettuce" id="lettuce-simple" class="serving-radio" value="1">
-          <label for="lettuce-simple">Simple</label>
-          <input type="radio" name="serving-lettuce" id="lettuce-doble" class="serving-radio" value="2">
-          <label for="lettuce-doble">Doble</label>
+          <label for="lettuce-simple" data-i18n="servingSingle">Single</label>
+          <input type="radio" name="serving-lettuce" id="lettuce-double" class="serving-radio" value="2">
+          <label for="lettuce-double" data-i18n="servingDouble">Double</label>
         </div>
       </div>
       
-      <!-- Queso mexicano 1 oz -->
+      <!-- Mexican Cheese 1 oz -->
       <div class="ingredient" data-calories="100" data-protein="7" data-fat="8" data-carbs="1">
         <div class="ingredient-info">
-          <span>Queso mexicano (1 oz) - 100 cal, 7g proteína, 8g grasa, 1g carbohidrato</span>
+          <span data-i18n="ingredientMexCheese">Mexican Cheese (1 oz) - 100 cal, 7g protein, 8g fat, 1g carb</span>
         </div>
         <div class="serving-options">
           <input type="radio" name="serving-mexican-cheese" id="mexican-cheese-simple" class="serving-radio" value="1">
-          <label for="mexican-cheese-simple">Simple</label>
-          <input type="radio" name="serving-mexican-cheese" id="mexican-cheese-doble" class="serving-radio" value="2">
-          <label for="mexican-cheese-doble">Doble</label>
+          <label for="mexican-cheese-simple" data-i18n="servingSingle">Single</label>
+          <input type="radio" name="serving-mexican-cheese" id="mexican-cheese-double" class="serving-radio" value="2">
+          <label for="mexican-cheese-double" data-i18n="servingDouble">Double</label>
         </div>
       </div>
       
       <!-- Rosada 1 oz -->
       <div class="ingredient" data-calories="80" data-protein="0" data-fat="7" data-carbs="4">
         <div class="ingredient-info">
-          <span>Rosada (1 oz) - 80 cal, 0g proteína, 7g grasa, 4g carbohidratos</span>
+          <span data-i18n="ingredientRosada">Rosada (1 oz) - 80 cal, 0g protein, 7g fat, 4g carbs</span>
         </div>
         <div class="serving-options">
           <input type="radio" name="serving-rosada" id="rosada-simple" class="serving-radio" value="1">
-          <label for="rosada-simple">Simple</label>
-          <input type="radio" name="serving-rosada" id="rosada-doble" class="serving-radio" value="2">
-          <label for="rosada-doble">Doble</label>
+          <label for="rosada-simple" data-i18n="servingSingle">Single</label>
+          <input type="radio" name="serving-rosada" id="rosada-double" class="serving-radio" value="2">
+          <label for="rosada-double" data-i18n="servingDouble">Double</label>
         </div>
       </div>
     </div>
     <div class="totals">
-      <p id="totalCalories">Calorías: 0</p>
-      <p id="totalProtein">Proteína: 0g</p>
-      <p id="totalFat">Grasa: 0g</p>
-      <p id="totalCarbs">Carbohidratos: 0g</p>
-      <p id="totalPrice">Precio: 250</p>
+      <p id="totalCalories" data-i18n="totalsCalories">Calories: 0</p>
+      <p id="totalProtein" data-i18n="totalsProtein">Protein: 0g</p>
+      <p id="totalFat" data-i18n="totalsFat">Fat: 0g</p>
+      <p id="totalCarbs" data-i18n="totalsCarbs">Carbs: 0g</p>
+      <p id="totalPrice" data-i18n="totalsPrice">Price: 250</p>
     </div>
   </div>
 
   <script>
-    // Lógica para los botones de selección/deselección de cada opción de ingrediente
+    // Global current language (default is English)
+    let currentLanguage = "en";
+
+    // Translations dictionary
+    const translations = {
+      en: {
+        headerTitle: "Macro & Price Calculator",
+        headerSubtitle: "Select your serving size (Single or Double) for each ingredient",
+        languageLabel: "Language:",
+        languageStatus: "English",
+        categoryMealType: "MEAL TYPE",
+        mealTypeSelect: "Select your main meal",
+        mealBurrito: "Burrito",
+        mealBowl: "Bowl",
+        mealTacos: "3 Tacos",
+        mealSalad: "Salad",
+        categoryBase: "BASE",
+        ingredientTortilla: "Tortilla (7 oz) - 240 cal, 5g protein, 6g fat, 40g carbs",
+        ingredientTacos: "3 Corn Tacos - 180 cal, 6g protein, 3g fat, 36g carbs",
+        ingredientRice: "White Rice (3 oz) - 131 cal, 2.3g protein, 2.7g fat, 24.1g carbs",
+        ingredientBeans: "Red Beans (3 oz) - 110 cal, 7g protein, 0.5g fat, 20g carbs",
+        categoryProtein: "PROTEIN",
+        ingredientChicken: "Chicken (4 oz) - 124 cal, 26g protein, 3g fat, 0g carbs",
+        ingredientSteak: "Steak (4 oz) - 200 cal, 23g protein, 12g fat, 0g carbs",
+        ingredientBarbacoa: "Barbacoa (4 oz) - 150 cal, 22g protein, 7g fat, 0g carbs",
+        categoryToppings: "TOPPINGS",
+        ingredientCheese: "Melted Cheese (3 oz) - 200 cal, 10g protein, 15g fat, 8g carbs",
+        ingredientPico: "Pico de Gallo (4 oz) - 20 cal, 1g protein, 0g fat, 5g carbs",
+        ingredientMediumSalsa: "Medium Salsa (3 oz) - 25 cal, 1g protein, 0g fat, 6g carbs",
+        ingredientGreenSalsa: "Green Salsa (1 oz) - 10 cal, 0.3g protein, 0.5g fat, 2g carbs",
+        ingredientGuacamole: "Guacamole (3 oz) - 150 cal, 2g protein, 13g fat, 8g carbs",
+        ingredientLettuce: "Lettuce (2 oz) - 10 cal, 1g protein, 0g fat, 2g carbs",
+        ingredientMexCheese: "Mexican Cheese (1 oz) - 100 cal, 7g protein, 8g fat, 1g carb",
+        ingredientRosada: "Rosada (1 oz) - 80 cal, 0g protein, 7g fat, 4g carbs",
+        servingSingle: "Single",
+        servingDouble: "Double",
+        totalsCalories: "Calories: ",
+        totalsProtein: "Protein: ",
+        totalsFat: "Fat: ",
+        totalsCarbs: "Carbs: ",
+        totalsPrice: "Price: "
+      },
+      es: {
+        headerTitle: "Calculadora de Macro y Precio",
+        headerSubtitle: "Seleccione el tamaño de la porción (Simple o Doble) para cada ingrediente",
+        languageLabel: "Idioma:",
+        languageStatus: "Español",
+        categoryMealType: "TIPO DE COMIDA",
+        mealTypeSelect: "Seleccione su comida principal",
+        mealBurrito: "Burrito",
+        mealBowl: "Bowl",
+        mealTacos: "3 Tacos",
+        mealSalad: "Ensalada",
+        categoryBase: "LA BASE",
+        ingredientTortilla: "Tortilla (7 oz) - 240 cal, 5g proteína, 6g grasa, 40g carbohidratos",
+        ingredientTacos: "Tacos de maíz (3 piezas) - 180 cal, 6g proteína, 3g grasa, 36g carbohidratos",
+        ingredientRice: "Arroz blanco (3 oz) - 131 cal, 2.3g proteína, 2.7g grasa, 24.1g carbohidratos",
+        ingredientBeans: "Frijoles rojos (3 oz) - 110 cal, 7g proteína, 0.5g grasa, 20g carbohidratos",
+        categoryProtein: "LA PROTEÍNA",
+        ingredientChicken: "Pollo (4 oz) - 124 cal, 26g proteína, 3g grasa, 0g carbohidratos",
+        ingredientSteak: "Carne de res (4 oz) - 200 cal, 23g proteína, 12g grasa, 0g carbohidratos",
+        ingredientBarbacoa: "Barbacoa (4 oz) - 150 cal, 22g proteína, 7g grasa, 0g carbohidratos",
+        categoryToppings: "ADEREZOS",
+        ingredientCheese: "Queso fundido (3 oz) - 200 cal, 10g proteína, 15g grasa, 8g carbohidratos",
+        ingredientPico: "Pico de gallo (4 oz) - 20 cal, 1g proteína, 0g grasa, 5g carbohidratos",
+        ingredientMediumSalsa: "Salsa mediana (3 oz) - 25 cal, 1g proteína, 0g grasa, 6g carbohidratos",
+        ingredientGreenSalsa: "Salsa verde (1 oz) - 10 cal, 0.3g proteína, 0.5g grasa, 2g carbohidratos",
+        ingredientGuacamole: "Guacamole (3 oz) - 150 cal, 2g proteína, 13g grasa, 8g carbohidratos",
+        ingredientLettuce: "Lechuga (2 oz) - 10 cal, 1g proteína, 0g grasa, 2g carbohidratos",
+        ingredientMexCheese: "Queso mexicano (1 oz) - 100 cal, 7g proteína, 8g grasa, 1g carbohidrato",
+        ingredientRosada: "Rosada (1 oz) - 80 cal, 0g proteína, 7g grasa, 4g carbohidratos",
+        servingSingle: "Simple",
+        servingDouble: "Doble",
+        totalsCalories: "Calorías: ",
+        totalsProtein: "Proteína: ",
+        totalsFat: "Grasa: ",
+        totalsCarbs: "Carbohidratos: ",
+        totalsPrice: "Precio: "
+      }
+    };
+
+    // Update language texts in the DOM
+    function updateLanguage(lang) {
+      document.querySelectorAll('[data-i18n]').forEach(el => {
+        const key = el.getAttribute('data-i18n');
+        if (translations[lang] && translations[lang][key]) {
+          el.innerText = translations[lang][key];
+        }
+      });
+      calculateTotals();
+    }
+
+    // Language toggle event
+    document.getElementById('lang-toggle').addEventListener('change', function() {
+      currentLanguage = this.checked ? "es" : "en";
+      document.getElementById('lang-status').innerText = translations[currentLanguage].languageStatus;
+      updateLanguage(currentLanguage);
+    });
+
+    // Set default language on load
+    updateLanguage(currentLanguage);
+
+    /************************************************
+     * LOGIC FOR INGREDIENT BUTTONS (Serving Radios) *
+     ************************************************/
     document.querySelectorAll('.serving-radio').forEach(radio => {
       radio.addEventListener('click', function(e) {
         if (this.dataset.toggled === "true") {
@@ -373,14 +490,14 @@
       });
     });
 
-    // Lógica para el tipo de comida
+    /************************************************
+     * LOGIC FOR MEAL TYPE SELECTION                *
+     ************************************************/
     document.querySelectorAll('input[name="meal-type"]').forEach(radio => {
       radio.addEventListener('change', function() {
-        // Primero, deseleccionamos cualquier cambio automático previo
-        // Luego, dependiendo del tipo de comida, marcamos/desmarcamos ciertos ingredientes
         const mealType = this.value;
         if (mealType === "burrito") {
-          // Burrito: Tortilla simple, arroz simple, frijoles simples; desmarcar tacos
+          // Burrito: Single Tortilla, Single Rice, Single Beans; uncheck Tacos
           setRadio("tortilla-simple", true);
           setRadio("tortilla-doble", false);
           setRadio("white-rice-simple", true);
@@ -390,7 +507,7 @@
           setRadio("tacos-simple", false);
           setRadio("tacos-doble", false);
         } else if (mealType === "bowl") {
-          // Bowl: Desmarcar tortilla y tacos, marcar arroz doble y frijoles simples
+          // Bowl: Uncheck Tortilla and Tacos; Double Rice, Single Beans
           setRadio("tortilla-simple", false);
           setRadio("tortilla-doble", false);
           setRadio("tacos-simple", false);
@@ -400,7 +517,7 @@
           setRadio("red-beans-simple", true);
           setRadio("red-beans-doble", false);
         } else if (mealType === "tacos") {
-          // 3 Tacos: Desmarcar tortilla y arroz, marcar tacos simples y frijoles simples
+          // 3 Tacos: Uncheck Tortilla and Rice; Single Tacos, Single Beans
           setRadio("tortilla-simple", false);
           setRadio("tortilla-doble", false);
           setRadio("white-rice-simple", false);
@@ -410,7 +527,7 @@
           setRadio("red-beans-simple", true);
           setRadio("red-beans-doble", false);
         } else if (mealType === "salad") {
-          // Ensalada: Desmarcar tortilla, tacos y arroz; marcar frijoles simples y lechuga simple
+          // Salad: Uncheck Tortilla, Tacos, and Rice; Single Beans; and for Lettuce, Double (as per manual change)
           setRadio("tortilla-simple", false);
           setRadio("tortilla-doble", false);
           setRadio("tacos-simple", false);
@@ -419,6 +536,7 @@
           setRadio("white-rice-doble", false);
           setRadio("red-beans-simple", true);
           setRadio("red-beans-doble", false);
+          // For Lettuce, assume double for salad
           setRadio("lettuce-simple", false);
           setRadio("lettuce-doble", true);
         }
@@ -426,7 +544,7 @@
       });
     });
 
-    // Función auxiliar para marcar o desmarcar un radio por su id
+    // Helper function to set a radio button's state by id
     function setRadio(id, state) {
       const radio = document.getElementById(id);
       if (!radio) return;
@@ -439,17 +557,19 @@
       }
     }
 
-    // Función principal para calcular totales
+    /************************************************
+     * MAIN CALCULATION FUNCTION                    *
+     ************************************************/
     function calculateTotals() {
       let totalCalories = 0,
-          totalProtein = 0,
-          totalFat = 0,
-          totalCarbs = 0,
-          totalPrice = 200; // Precio base
+          totalProtein  = 0,
+          totalFat      = 0,
+          totalCarbs    = 0,
+          totalPrice    = 200; // Base price
 
       const ingredients = document.querySelectorAll('.ingredient');
       ingredients.forEach(function(ingredient) {
-        // Solo procesamos si el elemento tiene un atributo de datos 'data-calories'
+        // Skip elements without a data-calories attribute (like the meal type section)
         if (ingredient.getAttribute('data-calories') === null) return;
         const selectedRadio = ingredient.querySelector('input[type="radio"]:checked');
         if (selectedRadio) {
@@ -458,8 +578,8 @@
           totalProtein  += multiplier * parseFloat(ingredient.getAttribute('data-protein'));
           totalFat      += multiplier * parseFloat(ingredient.getAttribute('data-fat'));
           totalCarbs    += multiplier * parseFloat(ingredient.getAttribute('data-carbs'));
-
-          // Cálculo de precio para ítems con modificador
+          
+          // Price calculation for items with modifiers
           if (ingredient.hasAttribute('data-price-single')) {
             let priceSingle = parseFloat(ingredient.getAttribute('data-price-single'));
             if (multiplier === 1) {
@@ -472,14 +592,14 @@
         }
       });
       
-      // Asegura que el precio total sea al menos 250
+      // Ensure total price is at least 250
       totalPrice = Math.max(totalPrice, 250);
 
-      document.getElementById('totalCalories').innerText = "Calorías: " + Math.round(totalCalories);
-      document.getElementById('totalProtein').innerText = "Proteína: " + Math.round(totalProtein) + "g";
-      document.getElementById('totalFat').innerText = "Grasa: " + Math.round(totalFat) + "g";
-      document.getElementById('totalCarbs').innerText = "Carbohidratos: " + Math.round(totalCarbs) + "g";
-      document.getElementById('totalPrice').innerText = "Precio: " + Math.round(totalPrice);
+      document.getElementById('totalCalories').innerText = translations[currentLanguage].totalsCalories + Math.round(totalCalories);
+      document.getElementById('totalProtein').innerText  = translations[currentLanguage].totalsProtein + Math.round(totalProtein) + "g";
+      document.getElementById('totalFat').innerText      = translations[currentLanguage].totalsFat + Math.round(totalFat) + "g";
+      document.getElementById('totalCarbs').innerText    = translations[currentLanguage].totalsCarbs + Math.round(totalCarbs) + "g";
+      document.getElementById('totalPrice').innerText    = translations[currentLanguage].totalsPrice + Math.round(totalPrice);
     }
   </script>
 </body>
