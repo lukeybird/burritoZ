@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title data-i18n="headerTitle">Job Application</title>
+  <style>
+    /* Global Reset & Base Styles */
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Helvetica Neue', sans-serif;
+      background-color: #F4ECC2;
+      color: #000;
+    }
+    /* Header – Shared “Sexy” Design */
+    .header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      background-color: #F5841A;
+      color: #fff;
+      z-index: 1000;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+    }
+    .header-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 20px;
+    }
+
+    .header .left img {
+  max-height: 60px;
+  height: auto;
+  width: auto;
+}
+
+
+    .brand {
+      font-weight: bold;
+      font-size: 1.2em;
+      text-decoration: none;
+      color: #fff;
+    }
+    .language-toggle {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-weight: bold;
+      font-size: 0.9em;
+      color: #fff;
+    }
+    .switch {
+      position: relative;
+      display: inline-block;
+      width: 60px;
+      height: 34px;
+    }
+    .switch input { opacity: 0; width: 0; height: 0; }
+    .slider {
+      position: absolute;
+      cursor: pointer;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background-color: #ccc;
+      transition: .4s;
+      border-radius: 34px;
+    }
+    .slider:before {
+      position: absolute;
+      content: "";
+      height: 26px;
+      width: 26px;
+      left: 4px;
+      bottom: 4px;
+      background-color: #fff;
+      transition: .4s;
+      border-radius: 50%;
+    }
+    .switch input:checked + .slider {
+      background-color: #34C759;
+    }
+    .switch input:checked + .slider:before {
+      transform: translateX(26px);
+    }
+    .header-title {
+      text-align: center;
+      font-size: 2.5em;
+      font-weight: bold;
+      padding: 10px 0;
+      letter-spacing: 2px;
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+    }
+    .nav-bar {
+      background: linear-gradient(to right, #F5841A, #FBBE8C);
+      padding: 10px 0;
+      text-align: center;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+    }
+    .nav-button {
+      display: inline-block;
+      padding: 10px 20px;
+      margin: 0 10px;
+      background-color: transparent;
+      color: #fff;
+      border: 2px solid #fff;
+      border-radius: 5px;
+      text-decoration: none;
+      font-weight: bold;
+      transition: background-color 0.3s, color 0.3s;
+    }
+    .nav-button:hover {
+      background-color: rgba(255,255,255,0.2);
+    }
+    .nav-button.active {
+      background-color: #fff;
+      color: #F5841A;
+      border-color: #fff;
+    }
+    /* Main Content Wrapper */
+    .content-wrapper {
+      padding-top: 240px;
+      margin: 20px;
+    }
+    /* Application Container */
+    .application-container {
+      max-width: 900px;
+      margin: 0 auto;
+      background: #fff;
+      padding: 20px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+      border-radius: 10px;
+    }
+    /* Form Styles */
+    form {
+      display: flex;
+      flex-direction: column;
+    }
+    form label {
+      margin: 10px 0 5px;
+      font-weight: bold;
+    }
+    form input, form select, form textarea {
+      padding: 8px;
+      font-size: 1em;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      margin-bottom: 15px;
+    }
+    form button {
+      margin-top: 20px;
+      padding: 10px;
+      background-color: #F5841A;
+      border: none;
+      color: #000;
+      font-size: 1em;
+      cursor: pointer;
+      border-radius: 4px;
+      font-weight: bold;
+    }
+    form button:hover {
+      background-color: #B93C00;
+    }
+    /* Radio Button Group Styles (for positions, sex, yes/no groups) */
+    .radio-group {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 15px;
+    }
+    .radio-group input[type="radio"] { display: none; }
+    .radio-group label {
+      padding: 8px 16px;
+      border: 2px solid #F5841A;
+      border-radius: 5px;
+      background-color: #fff;
+      color: #F5841A;
+      cursor: pointer;
+      transition: background-color 0.3s, color 0.3s;
+      font-weight: bold;
+    }
+    .radio-group label:hover {
+      background-color: rgba(245,132,26,0.15);
+    }
+    .radio-group input[type="radio"]:checked + label {
+      background-color: #F5841A;
+      color: #fff;
+    }
+    /* Custom Range Slider Styling */
+    input[type="range"] {
+      -webkit-appearance: none;
+      width: 100%;
+      height: 8px;
+      border-radius: 5px;
+      background: #F5841A;
+      outline: none;
+      margin-bottom: 5px;
+    }
+    input[type="range"]::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background: #fff;
+      border: 2px solid #B93C00;
+      cursor: pointer;
+    }
+    input[type="range"]::-moz-range-thumb {
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background: #fff;
+      border: 2px solid #B93C00;
+      cursor: pointer;
+    }
+    /* Stress Value Output */
+    #stressValue {
+      font-weight: bold;
+      font-size: 1.1em;
+      min-width: 30px;
+      text-align: center;
+    }
+    small {
+      display: block;
+      margin-bottom: 10px;
+      font-style: italic;
+      color: #555;
+    }
+    @media (max-width: 600px) {
+      .header-top, .language-toggle { flex-direction: column; text-align: center; }
+      .language-toggle { margin-top: 10px; }
+      .nav-bar { padding: 10px 0; }
+      .radio-group { justify-content: center; }
+    }
+  </style>
+</head>
+<body>
+  <!-- Fixed Header -->
+  <header class="header">
+    <div class="header-top">
+      <a href="index.html" class="brand" data-i18n="brandName">Burrito Z</a>
+      <div class="language-toggle">
+        <label for="lang-toggle" data-i18n="languageStatus">English</label>
+        <label class="switch">
+          <input type="checkbox" id="lang-toggle">
+          <span class="slider"></span>
+        </label>
+      </div>
+    </div>
+    <div class="header-title" data-i18n="headerTitle">Job Application</div>
+    <div class="nav-bar">
+      <a href="index.html" class="nav-button" data-i18n="macroTrackButton">MacroTrack</a>
+      <a href="application.html" class="nav-button active" data-i18n="jobApplicationButton">Job Application</a>
+    </div>
+  </header>
+  
+  <!-- Main Content -->
+  <div class="content-wrapper">
+    <div class="application-container">
+      <form id="jobApplicationForm" action="https://formspree.io/f/xnnjkgae" method="POST">
+        <!-- Basic Info -->
+        <label for="fullName" data-i18n="jobFullName">Full Name</label>
+        <input type="text" id="fullName" name="fullName" required>
+        
+        <label for="email" data-i18n="jobEmail">Email Address</label>
+        <input type="email" id="email" name="email" required>
+        
+        <label for="phone" data-i18n="jobPhone">Phone Number</label>
+        <input type="tel" id="phone" name="phone" required>
+        
+        <!-- Position Selection -->
+        <label data-i18n="jobPosition">Which position are you most interested in?</label>
+        <div class="radio-group">
+          <input type="radio" name="position" id="position-chef" value="chef" required>
+          <label for="position-chef" data-i18n="positionChef">Chef</label>
+          <input type="radio" name="position" id="position-front" value="front">
+          <label for="position-front" data-i18n="positionFront">Front</label>
+          <input type="radio" name="position" id="position-cashier" value="cashier">
+          <label for="position-cashier" data-i18n="positionCashier">Cashier</label>
+        </div>
+        
+        <!-- Stress Handling -->
+        <label data-i18n="jobStress">How well do you handle stress in the workplace? (1-10)</label>
+        <div style="display: flex; align-items: center; gap: 10px;">
+          <input type="range" id="stressLevel" name="stressLevel" min="1" max="10" value="5">
+          <span id="stressValue">5</span>
+        </div>
+        <small data-i18n="stressFootnote">Optional: Please explain your rating.</small>
+        <textarea id="stressExplanation" name="stressExplanation" placeholder="Optional explanation..."></textarea>
+        
+        <!-- Age -->
+        <label for="age" data-i18n="jobAge">Age</label>
+        <input type="number" id="age" name="age" required>
+        
+        <!-- Sex -->
+        <label data-i18n="jobSex">Sex</label>
+        <div class="radio-group">
+          <input type="radio" name="sex" id="sex-male" value="male" required>
+          <label for="sex-male" data-i18n="sexMale">Male</label>
+          <input type="radio" name="sex" id="sex-female" value="female">
+          <label for="sex-female" data-i18n="sexFemale">Female</label>
+          <input type="radio" name="sex" id="sex-other" value="other">
+          <label for="sex-other" data-i18n="sexOther">Other</label>
+        </div>
+        
+        <!-- Obey Instruction (Yes/No) -->
+        <label data-i18n="jobObeyInstruction">Are you willing to obey instruction?</label>
+        <div class="radio-group">
+          <input type="radio" name="obeyInstruction" id="instruction-yes" value="yes" required>
+          <label for="instruction-yes" data-i18n="yes">Yes</label>
+          <input type="radio" name="obeyInstruction" id="instruction-no" value="no">
+          <label for="instruction-no" data-i18n="no">No</label>
+        </div>
+        
+        <!-- Clean Toilets (Yes/No) -->
+        <label data-i18n="jobCleanToilets">Are you willing to clean toilets?</label>
+        <div class="radio-group">
+          <input type="radio" name="cleanToilets" id="clean-yes" value="yes" required>
+          <label for="clean-yes" data-i18n="yes">Yes</label>
+          <input type="radio" name="cleanToilets" id="clean-no" value="no">
+          <label for="clean-no" data-i18n="no">No</label>
+        </div>
+        
+        <button type="submit" data-i18n="submitApplication">Submit Application</button>
+      </form>
+    </div>
+  </div>
+  
+  <script>
+    // Translation dictionary for Job Application page
+    const translations = {
+      en: {
+        headerTitle: "Job Application",
+        brandName: "Burrito Z",
+        languageStatus: "English",
+        macroTrackButton: "MacroTrack",
+        jobApplicationButton: "Job Application",
+        jobFullName: "Full Name",
+        jobEmail: "Email Address",
+        jobPhone: "Phone Number",
+        jobPosition: "Which position are you most interested in?",
+        positionChef: "Chef",
+        positionFront: "Front",
+        positionCashier: "Cashier",
+        jobStress: "How well do you handle stress in the workplace? (1-10)",
+        stressFootnote: "Optional: Please explain your rating.",
+        jobAge: "Age",
+        jobSex: "Sex",
+        sexMale: "Male",
+        sexFemale: "Female",
+        sexOther: "Other",
+        jobObeyInstruction: "Are you willing to obey instruction?",
+        jobCleanToilets: "Are you willing to clean toilets?",
+        yes: "Yes",
+        no: "No",
+        submitApplication: "Submit Application",
+        totalsCalories: "Calories: ",
+        totalsProtein: "Protein: ",
+        totalsFat: "Fat: ",
+        totalsCarbs: "Carbs: ",
+        totalsPrice: "Price: "
+      },
+      es: {
+        headerTitle: "Solicitud de Empleo",
+        brandName: "Burrito Z",
+        languageStatus: "Español",
+        macroTrackButton: "MacroTrack",
+        jobApplicationButton: "Solicitud de Empleo",
+        jobFullName: "Nombre Completo",
+        jobEmail: "Correo Electrónico",
+        jobPhone: "Número de Teléfono",
+        jobPosition: "¿En qué puesto estás más interesado?",
+        positionChef: "Chef",
+        positionFront: "Atención al cliente",
+        positionCashier: "Cajero",
+        jobStress: "¿Qué tan bien manejas el estrés en el trabajo? (1-10)",
+        stressFootnote: "Opcional: Por favor explica tu calificación.",
+        jobAge: "Edad",
+        jobSex: "Sexo",
+        sexMale: "Masculino",
+        sexFemale: "Femenino",
+        sexOther: "Otro",
+        jobObeyInstruction: "¿Estás dispuesto a obedecer instrucciones?",
+        jobCleanToilets: "¿Estás dispuesto a limpiar los baños?",
+        yes: "Sí",
+        no: "No",
+        submitApplication: "Enviar Solicitud",
+        totalsCalories: "Calorías: ",
+        totalsProtein: "Proteína: ",
+        totalsFat: "Grasa: ",
+        totalsCarbs: "Carbohidratos: ",
+        totalsPrice: "Precio: "
+      }
+    };
+    function updateLanguage(lang) {
+      document.querySelectorAll('[data-i18n]').forEach(el => {
+        const key = el.getAttribute('data-i18n');
+        if (translations[lang] && translations[lang][key]) {
+          el.innerText = translations[lang][key];
+        }
+      });
+    }
+    document.getElementById('lang-toggle').addEventListener('change', function() {
+      const lang = this.checked ? "es" : "en";
+      updateLanguage(lang);
+    });
+    updateLanguage("en");
+    
+    // Update stress value display as slider moves
+    document.getElementById('stressLevel').addEventListener('input', function() {
+      document.getElementById('stressValue').innerText = this.value;
+    });
+    
+    // The form now submits to Formspree (no preventDefault here)
+  </script>
+</body>
+</html>
