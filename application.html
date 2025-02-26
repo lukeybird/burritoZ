@@ -40,7 +40,6 @@
       background-color: #000;
       color: #fff;
     }
-
     /* Left: Logo */
     .header .left img {
       max-height: 40px;
@@ -48,22 +47,19 @@
       width: auto;
       object-fit: contain;
     }
-
     /* Center: Title */
     .header .center {
       font-size: calc(16px + 1vw);
       font-weight: bold;
       text-align: center;
     }
-
     /* Right: Toggles */
     .header .right {
       display: flex;
       align-items: center;
       gap: 16px;
     }
-
-    /* Theme & Language Toggles */
+    /* Theme & Language Toggle Switches */
     .theme-toggle,
     .language-toggle {
       display: flex;
@@ -113,9 +109,10 @@
       transform: translateX(26px);
     }
 
+    /* Navigation Bar (removed page selector as requested) */
     /* Main Content Wrapper */
     .content-wrapper {
-      padding-top: 100px; /* reduced white space since nav-bar is removed */
+      padding-top: 100px; /* reduced white space */
       margin: 20px;
     }
 
@@ -167,7 +164,7 @@
       background-color: #8C1F1F;
     }
 
-    /* Radio Button Group Styles (for positions, sex, yes/no groups) */
+    /* Radio Button Group Styles */
     .radio-group {
       display: flex;
       flex-wrap: wrap;
@@ -297,6 +294,19 @@
           <label for="position-cashier" data-i18n="positionCashier">Cashier</label>
         </div>
 
+        <!-- New: Work Time Selection -->
+        <label data-i18n="jobWorkTime">What time of the day are you interested in working?</label>
+        <div class="radio-group">
+          <input type="radio" name="workTime" id="workTime-all" value="all" required />
+          <label for="workTime-all" data-i18n="workTimeAll">All</label>
+          <input type="radio" name="workTime" id="workTime-morning" value="morning" />
+          <label for="workTime-morning" data-i18n="workTimeMorning">Morning</label>
+          <input type="radio" name="workTime" id="workTime-night" value="night" />
+          <label for="workTime-night" data-i18n="workTimeNight">Night</label>
+        </div>
+        <small data-i18n="workTimeFootnote">Optional: Please explain your preference.</small>
+        <textarea id="workTimeExplanation" name="workTimeExplanation" placeholder="Optional explanation..."></textarea>
+
         <!-- Stress Handling -->
         <label data-i18n="jobStress">How well do you handle stress in the workplace? (1-10)</label>
         <div style="display: flex; align-items: center; gap: 10px;">
@@ -360,6 +370,11 @@
         positionChef: "Chef",
         positionFront: "Front",
         positionCashier: "Cashier",
+        jobWorkTime: "What time of the day are you interested in working?",
+        workTimeAll: "All",
+        workTimeMorning: "Morning",
+        workTimeNight: "Night",
+        workTimeFootnote: "Optional: Please explain your preference.",
         jobStress: "How well do you handle stress in the workplace? (1-10)",
         stressFootnote: "Optional: Please explain your rating.",
         jobSpeakEnglish: "Do you speak English? (1-10)",
@@ -394,6 +409,11 @@
         positionChef: "Chef",
         positionFront: "Atención al cliente",
         positionCashier: "Cajero",
+        jobWorkTime: "¿A qué hora del día te interesa trabajar?",
+        workTimeAll: "Todo",
+        workTimeMorning: "Mañana",
+        workTimeNight: "Noche",
+        workTimeFootnote: "Opcional: Por favor explica tu preferencia.",
         jobStress: "¿Qué tan bien manejas el estrés en el trabajo? (1-10)",
         stressFootnote: "Opcional: Por favor explica tu calificación.",
         jobSpeakEnglish: "¿Hablas inglés? (1-10)",
@@ -424,7 +444,7 @@
           el.innerText = translations[lang][key];
         }
       });
-      // Update theme toggle label based on the current toggle state
+      // Update theme toggle label based on toggle state
       const themeLabel = document.getElementById('theme-label');
       const themeToggle = document.getElementById('theme-toggle');
       if (themeToggle.checked) {
