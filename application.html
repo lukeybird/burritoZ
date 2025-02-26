@@ -1,57 +1,77 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title data-i18n="headerTitle">Job Application</title>
   <style>
-    /* Global Reset & Base Styles */
+    /* Global Reset */
     * { box-sizing: border-box; }
-    body {
-      margin: 0;
-      padding: 0;
-      font-family: 'Helvetica Neue', sans-serif;
+
+    /* Base Styles for Day and Night Modes */
+    body.day-mode {
       background-color: #F4ECC2;
       color: #000;
     }
-    /* Header – Shared “Sexy” Design */
+    body.night-mode {
+      background-color: #121212;
+      color: #fff;
+    }
+
+    /* Fixed Header */
     .header {
       position: fixed;
       top: 0;
       left: 0;
       width: 100%;
-      background-color: #F5841A;
-      color: #fff;
-      z-index: 1000;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.3);
-    }
-    .header-top {
+      padding: 20px;
       display: flex;
-      justify-content: space-between;
       align-items: center;
-      padding: 10px 20px;
+      justify-content: space-between;
+      z-index: 1000;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
     }
-
-    .header .left img {
-  max-height: 60px;
-  height: auto;
-  width: auto;
-}
-
-
-    .brand {
-      font-weight: bold;
-      font-size: 1.2em;
-      text-decoration: none;
+    /* Header colors based on mode */
+    body.day-mode .header {
+      background-color: #F5841A;
+      color: #000;
+    }
+    body.night-mode .header {
+      background-color: #000;
       color: #fff;
     }
+
+    /* Left: Logo */
+    .header .left img {
+      max-height: 40px;
+      height: auto;
+      width: auto;
+      object-fit: contain;
+    }
+
+    /* Center: Title */
+    .header .center {
+      font-size: calc(16px + 1vw);
+      font-weight: bold;
+      text-align: center;
+    }
+
+    /* Right: Toggles */
+    .header .right {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    /* Theme & Language Toggles */
+    .theme-toggle,
     .language-toggle {
       display: flex;
       align-items: center;
       gap: 8px;
       font-weight: bold;
       font-size: 0.9em;
-      color: #fff;
+      color: inherit;
     }
     .switch {
       position: relative;
@@ -59,13 +79,17 @@
       width: 60px;
       height: 34px;
     }
-    .switch input { opacity: 0; width: 0; height: 0; }
+    .switch input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
     .slider {
       position: absolute;
       cursor: pointer;
       top: 0; left: 0; right: 0; bottom: 0;
       background-color: #ccc;
-      transition: .4s;
+      transition: 0.4s;
       border-radius: 34px;
     }
     .slider:before {
@@ -76,63 +100,42 @@
       left: 4px;
       bottom: 4px;
       background-color: #fff;
-      transition: .4s;
+      transition: 0.4s;
       border-radius: 50%;
     }
-    .switch input:checked + .slider {
-      background-color: #34C759;
+    /* Accent for toggles */
+    #theme-toggle:checked + .slider,
+    #lang-toggle:checked + .slider {
+      background-color: #B22024;
     }
-    .switch input:checked + .slider:before {
+    #theme-toggle:checked + .slider:before,
+    #lang-toggle:checked + .slider:before {
       transform: translateX(26px);
     }
-    .header-title {
-      text-align: center;
-      font-size: 2.5em;
-      font-weight: bold;
-      padding: 10px 0;
-      letter-spacing: 2px;
-      text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
-    }
-    .nav-bar {
-      background: linear-gradient(to right, #F5841A, #FBBE8C);
-      padding: 10px 0;
-      text-align: center;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.2);
-    }
-    .nav-button {
-      display: inline-block;
-      padding: 10px 20px;
-      margin: 0 10px;
-      background-color: transparent;
-      color: #fff;
-      border: 2px solid #fff;
-      border-radius: 5px;
-      text-decoration: none;
-      font-weight: bold;
-      transition: background-color 0.3s, color 0.3s;
-    }
-    .nav-button:hover {
-      background-color: rgba(255,255,255,0.2);
-    }
-    .nav-button.active {
-      background-color: #fff;
-      color: #F5841A;
-      border-color: #fff;
-    }
+
     /* Main Content Wrapper */
     .content-wrapper {
-      padding-top: 240px;
+      padding-top: 100px; /* reduced white space since nav-bar is removed */
       margin: 20px;
     }
+
     /* Application Container */
     .application-container {
       max-width: 900px;
-      margin: 0 auto;
-      background: #fff;
+      margin: 20px auto;
       padding: 20px;
-      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
       border-radius: 10px;
+      overflow: hidden;
     }
+    body.day-mode .application-container {
+      background: #fff;
+      color: #000;
+    }
+    body.night-mode .application-container {
+      background: #1F1F1F;
+      color: #fff;
+    }
+
     /* Form Styles */
     form {
       display: flex;
@@ -152,17 +155,18 @@
     form button {
       margin-top: 20px;
       padding: 10px;
-      background-color: #F5841A;
+      background-color: #B22024;
       border: none;
-      color: #000;
+      color: #fff;
       font-size: 1em;
       cursor: pointer;
       border-radius: 4px;
       font-weight: bold;
     }
     form button:hover {
-      background-color: #B93C00;
+      background-color: #8C1F1F;
     }
+
     /* Radio Button Group Styles (for positions, sex, yes/no groups) */
     .radio-group {
       display: flex;
@@ -173,39 +177,40 @@
     .radio-group input[type="radio"] { display: none; }
     .radio-group label {
       padding: 8px 16px;
-      border: 2px solid #F5841A;
+      border: 2px solid #B22024;
       border-radius: 5px;
-      background-color: #fff;
-      color: #F5841A;
+      background-color: inherit;
+      color: #B22024;
       cursor: pointer;
       transition: background-color 0.3s, color 0.3s;
       font-weight: bold;
     }
     .radio-group label:hover {
-      background-color: rgba(245,132,26,0.15);
-    }
-    .radio-group input[type="radio"]:checked + label {
-      background-color: #F5841A;
+      background-color: #4E2C20;
       color: #fff;
     }
+    .radio-group input[type="radio"]:checked + label {
+      background-color: #B22024;
+      color: #fff;
+    }
+
     /* Custom Range Slider Styling */
     input[type="range"] {
       -webkit-appearance: none;
       width: 100%;
       height: 8px;
       border-radius: 5px;
-      background: #F5841A;
+      background: #B22024;
       outline: none;
       margin-bottom: 5px;
     }
     input[type="range"]::-webkit-slider-thumb {
       -webkit-appearance: none;
-      appearance: none;
       width: 20px;
       height: 20px;
       border-radius: 50%;
       background: #fff;
-      border: 2px solid #B93C00;
+      border: 2px solid #8C1F1F;
       cursor: pointer;
     }
     input[type="range"]::-moz-range-thumb {
@@ -213,11 +218,11 @@
       height: 20px;
       border-radius: 50%;
       background: #fff;
-      border: 2px solid #B93C00;
+      border: 2px solid #8C1F1F;
       cursor: pointer;
     }
-    /* Stress Value Output */
-    #stressValue {
+    /* Slider Output Styling */
+    .slider-output {
       font-weight: bold;
       font-size: 1.1em;
       min-width: 30px;
@@ -227,110 +232,120 @@
       display: block;
       margin-bottom: 10px;
       font-style: italic;
-      color: #555;
+      color: #ccc;
     }
+
     @media (max-width: 600px) {
-      .header-top, .language-toggle { flex-direction: column; text-align: center; }
-      .language-toggle { margin-top: 10px; }
-      .nav-bar { padding: 10px 0; }
+      .header {
+        flex-direction: column;
+        text-align: center;
+      }
+      .header .right { margin-top: 10px; }
       .radio-group { justify-content: center; }
     }
   </style>
 </head>
-<body>
+<body class="night-mode">
   <!-- Fixed Header -->
-  <header class="header">
-    <div class="header-top">
-      <a href="application.html" class="brand" data-i18n="brandName">Burrito Z</a>
+  <div class="header">
+    <div class="left">
+      <img src="burritoz-logo.PNG" alt="Burrito Z" />
+    </div>
+    <div class="center" data-i18n="headerTitle">Job Application</div>
+    <div class="right">
+      <!-- Theme Toggle Switch -->
+      <div class="theme-toggle">
+        <label for="theme-toggle" id="theme-label">Night</label>
+        <label class="switch">
+          <input type="checkbox" id="theme-toggle" checked />
+          <span class="slider"></span>
+        </label>
+      </div>
+      <!-- Language Toggle Switch -->
       <div class="language-toggle">
         <label for="lang-toggle" data-i18n="languageStatus">English</label>
         <label class="switch">
-          <input type="checkbox" id="lang-toggle">
+          <input type="checkbox" id="lang-toggle" />
           <span class="slider"></span>
         </label>
       </div>
     </div>
-    <div class="header-title" data-i18n="headerTitle">Job Application</div>
-    <div class="nav-bar">
-      <a href="application.html" class="nav-button" data-i18n="macroTrackButton">MacroTrack</a>
-      <a href="application.html" class="nav-button active" data-i18n="jobApplicationButton">Job Application</a>
-    </div>
-  </header>
-  
-  <!-- Main Content -->
+  </div>
+
+  <!-- Main Content Wrapper -->
   <div class="content-wrapper">
     <div class="application-container">
       <form id="jobApplicationForm" action="https://formspree.io/f/xnnjkgae" method="POST">
         <!-- Basic Info -->
         <label for="fullName" data-i18n="jobFullName">Full Name</label>
-        <input type="text" id="fullName" name="fullName" required>
-        
+        <input type="text" id="fullName" name="fullName" required />
+
         <label for="email" data-i18n="jobEmail">Email Address</label>
-        <input type="email" id="email" name="email" required>
-        
+        <input type="email" id="email" name="email" required />
+
         <label for="phone" data-i18n="jobPhone">Phone Number</label>
-        <input type="tel" id="phone" name="phone" required>
-        
+        <input type="tel" id="phone" name="phone" required />
+
         <!-- Position Selection -->
         <label data-i18n="jobPosition">Which position are you most interested in?</label>
         <div class="radio-group">
-          <input type="radio" name="position" id="position-chef" value="chef" required>
+          <input type="radio" name="position" id="position-chef" value="chef" required />
           <label for="position-chef" data-i18n="positionChef">Chef</label>
-          <input type="radio" name="position" id="position-front" value="front">
+          <input type="radio" name="position" id="position-front" value="front" />
           <label for="position-front" data-i18n="positionFront">Front</label>
-          <input type="radio" name="position" id="position-cashier" value="cashier">
+          <input type="radio" name="position" id="position-cashier" value="cashier" />
           <label for="position-cashier" data-i18n="positionCashier">Cashier</label>
         </div>
-        
+
         <!-- Stress Handling -->
         <label data-i18n="jobStress">How well do you handle stress in the workplace? (1-10)</label>
         <div style="display: flex; align-items: center; gap: 10px;">
-          <input type="range" id="stressLevel" name="stressLevel" min="1" max="10" value="5">
-          <span id="stressValue">5</span>
+          <input type="range" id="stressLevel" name="stressLevel" min="1" max="10" value="5" />
+          <span id="stressValue" class="slider-output">5</span>
         </div>
         <small data-i18n="stressFootnote">Optional: Please explain your rating.</small>
         <textarea id="stressExplanation" name="stressExplanation" placeholder="Optional explanation..."></textarea>
-        
+
+        <!-- Speak English Slider -->
+        <label data-i18n="jobSpeakEnglish">Do you speak English? (1-10)</label>
+        <div style="display: flex; align-items: center; gap: 10px;">
+          <input type="range" id="speakEnglish" name="speakEnglish" min="1" max="10" value="5" />
+          <span id="speakEnglishValue" class="slider-output">5</span>
+        </div>
+        <small data-i18n="speakEnglishFootnote">Optional: Please explain your rating.</small>
+        <textarea id="speakEnglishExplanation" name="speakEnglishExplanation" placeholder="Optional explanation..."></textarea>
+
         <!-- Age -->
         <label for="age" data-i18n="jobAge">Age</label>
-        <input type="number" id="age" name="age" required>
-        
+        <input type="number" id="age" name="age" required />
+
         <!-- Sex -->
         <label data-i18n="jobSex">Sex</label>
         <div class="radio-group">
-          <input type="radio" name="sex" id="sex-male" value="male" required>
+          <input type="radio" name="sex" id="sex-male" value="male" required />
           <label for="sex-male" data-i18n="sexMale">Male</label>
-          <input type="radio" name="sex" id="sex-female" value="female">
+          <input type="radio" name="sex" id="sex-female" value="female" />
           <label for="sex-female" data-i18n="sexFemale">Female</label>
-          <input type="radio" name="sex" id="sex-other" value="other">
+          <input type="radio" name="sex" id="sex-other" value="other" />
           <label for="sex-other" data-i18n="sexOther">Other</label>
         </div>
-        
-        <!-- Obey Instruction (Yes/No) -->
-        <label data-i18n="jobObeyInstruction">Are you willing to obey instruction?</label>
-        <div class="radio-group">
-          <input type="radio" name="obeyInstruction" id="instruction-yes" value="yes" required>
-          <label for="instruction-yes" data-i18n="yes">Yes</label>
-          <input type="radio" name="obeyInstruction" id="instruction-no" value="no">
-          <label for="instruction-no" data-i18n="no">No</label>
-        </div>
-        
+
         <!-- Clean Toilets (Yes/No) -->
         <label data-i18n="jobCleanToilets">Are you willing to clean toilets?</label>
         <div class="radio-group">
-          <input type="radio" name="cleanToilets" id="clean-yes" value="yes" required>
+          <input type="radio" name="cleanToilets" id="clean-yes" value="yes" required />
           <label for="clean-yes" data-i18n="yes">Yes</label>
-          <input type="radio" name="cleanToilets" id="clean-no" value="no">
+          <input type="radio" name="cleanToilets" id="clean-no" value="no" />
           <label for="clean-no" data-i18n="no">No</label>
         </div>
-        
+
         <button type="submit" data-i18n="submitApplication">Submit Application</button>
       </form>
     </div>
   </div>
-  
+
   <script>
-    // Translation dictionary for Job Application page
+    // Translation dictionary for the job application page
     const translations = {
       en: {
         headerTitle: "Job Application",
@@ -347,12 +362,13 @@
         positionCashier: "Cashier",
         jobStress: "How well do you handle stress in the workplace? (1-10)",
         stressFootnote: "Optional: Please explain your rating.",
+        jobSpeakEnglish: "Do you speak English? (1-10)",
+        speakEnglishFootnote: "Optional: Please explain your rating.",
         jobAge: "Age",
         jobSex: "Sex",
         sexMale: "Male",
         sexFemale: "Female",
         sexOther: "Other",
-        jobObeyInstruction: "Are you willing to obey instruction?",
         jobCleanToilets: "Are you willing to clean toilets?",
         yes: "Yes",
         no: "No",
@@ -361,7 +377,9 @@
         totalsProtein: "Protein: ",
         totalsFat: "Fat: ",
         totalsCarbs: "Carbs: ",
-        totalsPrice: "Price: "
+        totalsPrice: "Price: ",
+        themeDay: "Day",
+        themeNight: "Night"
       },
       es: {
         headerTitle: "Solicitud de Empleo",
@@ -378,12 +396,13 @@
         positionCashier: "Cajero",
         jobStress: "¿Qué tan bien manejas el estrés en el trabajo? (1-10)",
         stressFootnote: "Opcional: Por favor explica tu calificación.",
+        jobSpeakEnglish: "¿Hablas inglés? (1-10)",
+        speakEnglishFootnote: "Opcional: Por favor explica tu calificación.",
         jobAge: "Edad",
         jobSex: "Sexo",
         sexMale: "Masculino",
         sexFemale: "Femenino",
         sexOther: "Otro",
-        jobObeyInstruction: "¿Estás dispuesto a obedecer instrucciones?",
         jobCleanToilets: "¿Estás dispuesto a limpiar los baños?",
         yes: "Sí",
         no: "No",
@@ -392,9 +411,12 @@
         totalsProtein: "Proteína: ",
         totalsFat: "Grasa: ",
         totalsCarbs: "Carbohidratos: ",
-        totalsPrice: "Precio: "
+        totalsPrice: "Precio: ",
+        themeDay: "Día",
+        themeNight: "Noche"
       }
     };
+
     function updateLanguage(lang) {
       document.querySelectorAll('[data-i18n]').forEach(el => {
         const key = el.getAttribute('data-i18n');
@@ -402,19 +424,45 @@
           el.innerText = translations[lang][key];
         }
       });
+      // Update theme toggle label based on the current toggle state
+      const themeLabel = document.getElementById('theme-label');
+      const themeToggle = document.getElementById('theme-toggle');
+      if (themeToggle.checked) {
+        themeLabel.innerText = translations[currentLanguage].themeNight;
+      } else {
+        themeLabel.innerText = translations[currentLanguage].themeDay;
+      }
     }
+
+    let currentLanguage = "en";
     document.getElementById('lang-toggle').addEventListener('change', function() {
-      const lang = this.checked ? "es" : "en";
-      updateLanguage(lang);
+      currentLanguage = this.checked ? "es" : "en";
+      updateLanguage(currentLanguage);
     });
-    updateLanguage("en");
-    
-    // Update stress value display as slider moves
+    updateLanguage(currentLanguage);
+
+    // Update stress slider display
     document.getElementById('stressLevel').addEventListener('input', function() {
       document.getElementById('stressValue').innerText = this.value;
     });
-    
-    // The form now submits to Formspree (no preventDefault here)
+    // Update speak English slider display
+    document.getElementById('speakEnglish').addEventListener('input', function() {
+      document.getElementById('speakEnglishValue').innerText = this.value;
+    });
+
+    // Theme toggle: switch between day and night mode
+    document.getElementById('theme-toggle').addEventListener('change', function () {
+      const themeLabel = document.getElementById('theme-label');
+      if (this.checked) {
+        document.body.classList.add('night-mode');
+        document.body.classList.remove('day-mode');
+        themeLabel.innerText = translations[currentLanguage].themeNight;
+      } else {
+        document.body.classList.add('day-mode');
+        document.body.classList.remove('night-mode');
+        themeLabel.innerText = translations[currentLanguage].themeDay;
+      }
+    });
   </script>
 </body>
 </html>
