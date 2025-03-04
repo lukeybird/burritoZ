@@ -48,6 +48,7 @@
       font-size: 1.8em;
       font-weight: bold;
       text-align: center;
+      flex: 1;
     }
     .header .right {
       display: flex;
@@ -125,7 +126,7 @@
       color: #fff;
     }
     
-    /* Form Styles */
+    /* Form and Checklist Item Styles */
     form {
       display: flex;
       flex-direction: column;
@@ -184,16 +185,46 @@
       background-color: #8C1F1F;
     }
     
-    /* Mobile-specific adjustments */
+    /* Mobile-specific adjustments: Stack header elements vertically */
     @media (max-width: 600px) {
-      .header { padding: 10px; }
-      .header .center { font-size: 1.5em; }
-      .application-container { padding: 10px; }
-      form h2 { font-size: 1.3em; }
-      .checklist-item { padding: 10px; }
-      .item-text { font-size: 0.9em; }
-      .status-display { font-size: 0.8em; min-width: 80px; }
-      form button { font-size: 0.9em; padding: 10px; }
+      .header {
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+      }
+      .header .left, .header .center, .header .right {
+        width: 100%;
+        text-align: center;
+      }
+      .header .right {
+        flex-direction: row;
+        justify-content: center;
+      }
+      .header .center {
+        font-size: 1.5em;
+      }
+      .application-container {
+        padding: 10px;
+      }
+      form h2 {
+        font-size: 1.3em;
+      }
+      .checklist-item {
+        padding: 10px;
+        margin: 8px 0;
+      }
+      .item-text {
+        font-size: 0.9em;
+      }
+      .status-display {
+        font-size: 0.8em;
+        min-width: 80px;
+      }
+      form button {
+        font-size: 0.9em;
+        padding: 10px;
+      }
     }
   </style>
 </head>
@@ -226,6 +257,7 @@
   <div class="content-wrapper">
     <div class="application-container">
       <form id="mChecklistForm" action="https://formspree.io/f/xnnjkgae" method="POST" onsubmit="recordSubmissionStatus()">
+        
         <!-- Primary Checks Section -->
         <h2 data-i18n="primaryChecks">Primary Checks</h2>
         <div class="checklist-item" onclick="toggleItem(this)">
@@ -317,16 +349,11 @@
   </div>
   
   <script>
-    // Function to toggle a checklist item and update its status.
+    // When a checklist item is tapped, toggle its state and update the hidden field and display.
     function toggleItem(item) {
-      // Toggle the "selected" class on the container
       item.classList.toggle("selected");
-      
-      // Find the hidden input and display span inside this item
       const hiddenInput = item.querySelector("input[type='hidden']");
       const displaySpan = item.querySelector(".status-display");
-      
-      // Update status based on whether the container has the "selected" class
       if (item.classList.contains("selected")) {
         hiddenInput.value = "CHECKED ✅";
         displaySpan.innerText = "CHECKED ✅";
@@ -338,15 +365,11 @@
     
     // On form submission, update any hidden fields that haven't been toggled.
     function recordSubmissionStatus() {
-      // Record submission time if needed
       document.getElementById('submissionTime').value = new Date().toLocaleTimeString();
-      
-      // For each hidden input, if its value is empty, set it to "FORGOTTEN ❌"
       const hiddenInputs = document.querySelectorAll("input[type='hidden']");
       hiddenInputs.forEach(function(input) {
         if (!input.value) {
           input.value = "FORGOTTEN ❌";
-          // Update the display span if necessary
           const displaySpan = document.getElementById(input.id + "_display");
           if (displaySpan) {
             displaySpan.innerText = "FORGOTTEN ❌";
@@ -441,35 +464,6 @@
         themeLabel.innerText = translations[currentLanguage].themeDay;
       }
     });
-    
-    // When a checklist item is tapped, toggle its state and update the hidden field and display.
-    function toggleItem(item) {
-      item.classList.toggle("selected");
-      const hiddenInput = item.querySelector("input[type='hidden']");
-      const displaySpan = item.querySelector(".status-display");
-      if (item.classList.contains("selected")) {
-        hiddenInput.value = "CHECKED ✅";
-        displaySpan.innerText = "CHECKED ✅";
-      } else {
-        hiddenInput.value = "FORGOTTEN ❌";
-        displaySpan.innerText = "FORGOTTEN ❌";
-      }
-    }
-    
-    // On form submission, update any hidden fields that haven't been toggled.
-    function recordSubmissionStatus() {
-      document.getElementById('submissionTime').value = new Date().toLocaleTimeString();
-      const hiddenInputs = document.querySelectorAll("input[type='hidden']");
-      hiddenInputs.forEach(function(input) {
-        if (!input.value) {
-          input.value = "FORGOTTEN ❌";
-          const displaySpan = document.getElementById(input.id + "_display");
-          if (displaySpan) {
-            displaySpan.innerText = "FORGOTTEN ❌";
-          }
-        }
-      });
-    }
   </script>
 </body>
 </html>
