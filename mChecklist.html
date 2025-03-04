@@ -191,7 +191,7 @@
       background-color: #8C1F1F;
     }
     
-    /* Mobile-specific adjustments: Stack header elements vertically */
+    /* Mobile-specific adjustments */
     @media (max-width: 600px) {
       .header {
         flex-direction: column;
@@ -203,12 +203,12 @@
         width: 100%;
         text-align: center;
       }
-      .header .right {
-        flex-direction: row;
-        justify-content: center;
-      }
       .header .center {
         font-size: 1.5em;
+      }
+      /* Increase top padding so the first title is visible */
+      .content-wrapper {
+        padding-top: 150px;
       }
       .application-container {
         padding: 10px;
