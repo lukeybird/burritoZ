@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title data-i18n="headerTitle">Morning Checklist</title>
+  <style>
+    /* Global Reset */
+    * { box-sizing: border-box; }
+    /* Base Styles for Day and Night Modes */
+    body.day-mode {
+      background-color: #F4ECC2;
+      color: #000;
+    }
+    body.night-mode {
+      background-color: #121212;
+      color: #fff;
+    }
+    /* Fixed Header */
+    .header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      padding: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      z-index: 1000;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+    }
+    body.day-mode .header {
+      background-color: #F5841A;
+      color: #000;
+    }
+    body.night-mode .header {
+      background-color: #000;
+      color: #fff;
+    }
+    .header .left img {
+      max-height: 40px;
+      height: auto;
+      width: auto;
+      object-fit: contain;
+    }
+    .header .center {
+      font-size: calc(16px + 1vw);
+      font-weight: bold;
+      text-align: center;
+    }
+    .header .right {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+    /* Theme & Language Toggle Switches */
+    .theme-toggle,
+    .language-toggle {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-weight: bold;
+      font-size: 0.9em;
+      color: inherit;
+    }
+    .switch {
+      position: relative;
+      display: inline-block;
+      width: 60px;
+      height: 34px;
+    }
+    .switch input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+    .slider {
+      position: absolute;
+      cursor: pointer;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background-color: #ccc;
+      transition: 0.4s;
+      border-radius: 34px;
+    }
+    .slider:before {
+      position: absolute;
+      content: "";
+      height: 26px;
+      width: 26px;
+      left: 4px;
+      bottom: 4px;
+      background-color: #fff;
+      transition: 0.4s;
+      border-radius: 50%;
+    }
+    #theme-toggle:checked + .slider,
+    #lang-toggle:checked + .slider {
+      background-color: #B22024;
+    }
+    #theme-toggle:checked + .slider:before,
+    #lang-toggle:checked + .slider:before {
+      transform: translateX(26px);
+    }
+    /* Main Content Wrapper */
+    .content-wrapper {
+      padding-top: 100px;
+      margin: 20px;
+    }
+    /* Application Container */
+    .application-container {
+      max-width: 900px;
+      margin: 20px auto;
+      padding: 20px;
+      border-radius: 10px;
+      overflow: hidden;
+    }
+    body.day-mode .application-container {
+      background: #fff;
+      color: #000;
+    }
+    body.night-mode .application-container {
+      background: #1F1F1F;
+      color: #fff;
+    }
+    /* Form Styles */
+    form {
+      display: flex;
+      flex-direction: column;
+    }
+    form h2 {
+      margin-top: 30px;
+      font-size: 1.5em;
+      border-bottom: 2px solid #B22024;
+      padding-bottom: 5px;
+    }
+    .checklist-item {
+      display: flex;
+      align-items: center;
+      margin: 15px 0;
+      padding: 10px;
+      border: 2px solid #B22024;
+      border-radius: 8px;
+    }
+    .checklist-item label {
+      flex: 1;
+      font-weight: bold;
+      cursor: pointer;
+    }
+    .checklist-item input[type="checkbox"] {
+      margin-right: 15px;
+      transform: scale(1.5);
+      cursor: pointer;
+    }
+    /* Display for status */
+    .timestamp {
+      margin-left: 15px;
+      font-size: 0.9em;
+      color: #B22024;
+      min-width: 100px;
+    }
+    form button {
+      margin-top: 30px;
+      padding: 15px;
+      background-color: #B22024;
+      border: none;
+      color: #fff;
+      font-size: 1em;
+      cursor: pointer;
+      border-radius: 4px;
+      font-weight: bold;
+    }
+    form button:hover {
+      background-color: #8C1F1F;
+    }
+  </style>
+</head>
+<body class="night-mode">
+  <!-- Fixed Header -->
+  <div class="header">
+    <div class="left">
+      <img src="burritoz-logo.PNG" alt="Burrito Z" />
+    </div>
+    <div class="center" data-i18n="headerTitle">Morning Checklist</div>
+    <div class="right">
+      <!-- Theme Toggle Switch -->
+      <div class="theme-toggle">
+        <label for="theme-toggle" id="theme-label">Night</label>
+        <label class="switch">
+          <input type="checkbox" id="theme-toggle" checked />
+          <span class="slider"></span>
+        </label>
+      </div>
+      <!-- Language Toggle Switch -->
+      <div class="language-toggle">
+        <label for="lang-toggle" data-i18n="languageStatus">English</label>
+        <label class="switch">
+          <input type="checkbox" id="lang-toggle" />
+          <span class="slider"></span>
+        </label>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Main Content Wrapper -->
+  <div class="content-wrapper">
+    <div class="application-container">
+      <form id="mChecklistForm" action="https://formspree.io/f/xnnjkgae" method="POST" onsubmit="recordSubmissionTime()">
+        <!-- Primary Checks Section -->
+        <h2 data-i18n="primaryChecks">Primary Checks</h2>
+        <div class="checklist-item">
+          <input type="checkbox" id="lights" name="lights" onchange="recordTime(this, 'lightsStatus', 'lightsStatus_display')" />
+          <label for="lights" data-i18n="lights">Turn on the lights: Ensure the restaurant is well-lit and ready for the day.</label>
+          <span class="timestamp" id="lightsStatus_display"></span>
+          <input type="hidden" id="lightsStatus" name="lightsStatus" />
+        </div>
+        <div class="checklist-item">
+          <input type="checkbox" id="gasAppliances" name="gasAppliances" onchange="recordTime(this, 'gasAppliancesStatus', 'gasAppliancesStatus_display')" />
+          <label for="gasAppliances" data-i18n="gasAppliances">Check all gas appliances: Verify that all gas appliances are turned off before starting operations.</label>
+          <span class="timestamp" id="gasAppliancesStatus_display"></span>
+          <input type="hidden" id="gasAppliancesStatus" name="gasAppliancesStatus" />
+        </div>
+        <div class="checklist-item">
+          <input type="checkbox" id="openGasValve" name="openGasValve" onchange="recordTime(this, 'openGasValveStatus', 'openGasValveStatus_display')" />
+          <label for="openGasValve" data-i18n="openGasValve">Open the main gas valve: This step is crucial for safely powering up the kitchen.</label>
+          <span class="timestamp" id="openGasValveStatus_display"></span>
+          <input type="hidden" id="openGasValveStatus" name="openGasValveStatus" />
+        </div>
+        <div class="checklist-item">
+          <input type="checkbox" id="accountFood" name="accountFood" onchange="recordTime(this, 'accountFoodStatus', 'accountFoodStatus_display')" />
+          <label for="accountFood" data-i18n="accountFood">Account for all food: Verify that all food inventory is present and accounted for before beginning service.</label>
+          <span class="timestamp" id="accountFoodStatus_display"></span>
+          <input type="hidden" id="accountFoodStatus" name="accountFoodStatus" />
+        </div>
+        
+        <!-- Hot Foods Section -->
+        <h2 data-i18n="hotFoods">Hot Foods</h2>
+        <div class="checklist-item">
+          <input type="checkbox" id="cookRice" name="cookRice" onchange="recordTime(this, 'cookRiceStatus', 'cookRiceStatus_display')" />
+          <label for="cookRice" data-i18n="cookRice">Cook the rice: Measure 4 cups of rice, cook it, and divide it evenly into two big containers.</label>
+          <span class="timestamp" id="cookRiceStatus_display"></span>
+          <input type="hidden" id="cookRiceStatus" name="cookRiceStatus" />
+        </div>
+        <div class="checklist-item">
+          <input type="checkbox" id="boilBeans" name="boilBeans" onchange="recordTime(this, 'boilBeansStatus', 'boilBeansStatus_display')" />
+          <label for="boilBeans" data-i18n="boilBeans">Bring the beans to a boil: Prepare the beans and bring them to a boil.</label>
+          <span class="timestamp" id="boilBeansStatus_display"></span>
+          <input type="hidden" id="boilBeansStatus" name="boilBeansStatus" />
+        </div>
+        <div class="checklist-item">
+          <input type="checkbox" id="hotBuffet" name="hotBuffet" onchange="recordTime(this, 'hotBuffetStatus', 'hotBuffetStatus_display')" />
+          <label for="hotBuffet" data-i18n="hotBuffet">Prepare the hot buffet: Fill the hot side of the buffet with new water from the sink, turn the gas on the stove and ignite. Bring to a steaming temperature, then reduce to a mild flame.</label>
+          <span class="timestamp" id="hotBuffetStatus_display"></span>
+          <input type="hidden" id="hotBuffetStatus" name="hotBuffetStatus" />
+        </div>
+        <div class="checklist-item">
+          <input type="checkbox" id="barbacoa" name="barbacoa" onchange="recordTime(this, 'barbacoaStatus', 'barbacoaStatus_display')" />
+          <label for="barbacoa" data-i18n="barbacoa">Put out the barbacoa: Preparation for the barbacoa is done the night before (takes 8 hours to cook). Put it out in front.</label>
+          <span class="timestamp" id="barbacoaStatus_display"></span>
+          <input type="hidden" id="barbacoaStatus" name="barbacoaStatus" />
+        </div>
+        
+        <!-- Cold Foods Section -->
+        <h2 data-i18n="coldFoods">Cold Foods</h2>
+        <div class="checklist-item">
+          <input type="checkbox" id="setColdFoods" name="setColdFoods" onchange="recordTime(this, 'setColdFoodsStatus', 'setColdFoodsStatus_display')" />
+          <label for="setColdFoods" data-i18n="setColdFoods">Set out cold foods: All cold foods from the day before (Pico De Gallo, Medium salsa, Hot salsa, Corn salsa, White cream (mantecia), Lettuce, Cheese) must be put out with new containers ready for trade-out.</label>
+          <span class="timestamp" id="setColdFoodsStatus_display"></span>
+          <input type="hidden" id="setColdFoodsStatus" name="setColdFoodsStatus" />
+        </div>
+        <div class="checklist-item">
+          <input type="checkbox" id="setBeans" name="setBeans" onchange="recordTime(this, 'setBeansStatus', 'setBeansStatus_display')" />
+          <label for="setBeans" data-i18n="setBeans">Set out the beans: Bring the beans (cooked from the night before) to the front.</label>
+          <span class="timestamp" id="setBeansStatus_display"></span>
+          <input type="hidden" id="setBeansStatus" name="setBeansStatus" />
+        </div>
+        
+        <!-- Last Minute Foods Section -->
+        <h2 data-i18n="lastMinuteFoods">Last Minute Foods</h2>
+        <div class="checklist-item">
+          <input type="checkbox" id="prepareChicken" name="prepareChicken" onchange="recordTime(this, 'prepareChickenStatus', 'prepareChickenStatus_display')" />
+          <label for="prepareChicken" data-i18n="prepareChicken">Prepare the chicken: About 30 minutes prior to opening, prepare a whole pack of chicken in front.</label>
+          <span class="timestamp" id="prepareChickenStatus_display"></span>
+          <input type="hidden" id="prepareChickenStatus" name="prepareChickenStatus" />
+        </div>
+        <div class="checklist-item">
+          <input type="checkbox" id="setRice" name="setRice" onchange="recordTime(this, 'setRiceStatus', 'setRiceStatus_display')" />
+          <label for="setRice" data-i18n="setRice">Set out the rice: Add cilantro and lime to the rice and mix it before placing it out.</label>
+          <span class="timestamp" id="setRiceStatus_display"></span>
+          <input type="hidden" id="setRiceStatus" name="setRiceStatus" />
+        </div>
+        <div class="checklist-item">
+          <input type="checkbox" id="prepareSteak" name="prepareSteak" onchange="recordTime(this, 'prepareSteakStatus', 'prepareSteakStatus_display')" />
+          <label for="prepareSteak" data-i18n="prepareSteak">Prepare the steak: Steak is made fresh when the first customer asks for it.</label>
+          <span class="timestamp" id="prepareSteakStatus_display"></span>
+          <input type="hidden" id="prepareSteakStatus" name="prepareSteakStatus" />
+        </div>
+        <div class="checklist-item">
+          <input type="checkbox" id="prepareGuacamole" name="prepareGuacamole" onchange="recordTime(this, 'prepareGuacamoleStatus', 'prepareGuacamoleStatus_display')" />
+          <label for="prepareGuacamole" data-i18n="prepareGuacamole">Prepare the guacamole: Make the guacamole a couple of minutes before opening following the recipe.</label>
+          <span class="timestamp" id="prepareGuacamoleStatus_display"></span>
+          <input type="hidden" id="prepareGuacamoleStatus" name="prepareGuacamoleStatus" />
+        </div>
+        
+        <!-- Hidden field for submission time -->
+        <input type="hidden" id="submissionTime" name="submissionTime" />
+        
+        <button type="submit" data-i18n="submitChecklist">Submit Checklist</button>
+      </form>
+    </div>
+  </div>
+  
+  <script>
+    // Function to record status for a checklist item when checked/unchecked.
+    // When checked, it records "CHECKED ✅ - [timestamp]".
+    // When unchecked, it records "FORGOTTEN ❌ - [timestamp]".
+    function recordTime(checkbox, hiddenFieldId, displayFieldId) {
+      const hiddenField = document.getElementById(hiddenFieldId);
+      const displayField = document.getElementById(displayFieldId);
+      const now = new Date().toLocaleTimeString();
+      if (checkbox.checked) {
+        const value = "CHECKED ✅ - " + now;
+        hiddenField.value = value;
+        displayField.innerText = value;
+      } else {
+        const value = "FORGOTTEN ❌ - " + now;
+        hiddenField.value = value;
+        displayField.innerText = value;
+      }
+    }
+    
+    // Record submission time and update any checklist items that have not been toggled.
+    function recordSubmissionTime() {
+      const submissionTime = new Date().toLocaleTimeString();
+      const submissionField = document.getElementById('submissionTime');
+      submissionField.value = submissionTime;
+      
+      // For each hidden input that begins with "time", if its value is empty, update it.
+      const hiddenInputs = document.querySelectorAll("input[type='hidden'][id$='Status']");
+      hiddenInputs.forEach(function(input) {
+        if (!input.value) {
+          input.value = "FORGOTTEN ❌ - " + submissionTime;
+          // Also update the display span if desired.
+          const displaySpan = document.getElementById(input.id + "_display");
+          if (displaySpan) {
+            displaySpan.innerText = "FORGOTTEN ❌ - " + submissionTime;
+          }
+        }
+      });
+    }
+    
+    // Translation dictionary for the checklist page
+    const translations = {
+      en: {
+        headerTitle: "Morning Checklist",
+        languageStatus: "English",
+        themeDay: "Day",
+        themeNight: "Night",
+        primaryChecks: "Primary Checks",
+        hotFoods: "Hot Foods",
+        coldFoods: "Cold Foods",
+        lastMinuteFoods: "Last Minute Foods",
+        lights: "Turn on the lights: Ensure the restaurant is well-lit and ready for the day.",
+        gasAppliances: "Check all gas appliances: Verify that all gas appliances are turned off before starting operations.",
+        openGasValve: "Open the main gas valve: This step is crucial for safely powering up the kitchen.",
+        accountFood: "Account for all food: Verify that all food inventory is present and accounted for before beginning service.",
+        cookRice: "Cook the rice: Measure 4 cups of rice, cook it, and divide it evenly into two big containers.",
+        boilBeans: "Bring the beans to a boil: Prepare the beans and bring them to a boil.",
+        hotBuffet: "Prepare the hot buffet: Fill the hot side of the buffet with new water from the sink, turn the gas on the stove and ignite. Bring to a steaming temperature, then reduce to a mild flame.",
+        barbacoa: "Put out the barbacoa: Preparation for the barbacoa is done the night before (takes 8 hours to cook). Put it out in front.",
+        setColdFoods: "Set out cold foods: All cold foods from the day before (Pico De Gallo, Medium salsa, Hot salsa, Corn salsa, White cream (mantecia), Lettuce, Cheese) must be put out with new containers ready for trade-out.",
+        setBeans: "Set out the beans: Bring the beans (cooked from the night before) to the front.",
+        prepareChicken: "Prepare the chicken: About 30 minutes prior to opening, prepare a whole pack of chicken in front.",
+        setRice: "Set out the rice: Add cilantro and lime to the rice and mix it before placing it out.",
+        prepareSteak: "Prepare the steak: Steak is made fresh when the first customer asks for it.",
+        prepareGuacamole: "Prepare the guacamole: Make the guacamole a couple of minutes before opening following the recipe.",
+        submitChecklist: "Submit Checklist"
+      },
+      es: {
+        headerTitle: "Lista de Verificación de la Mañana",
+        languageStatus: "Español",
+        themeDay: "Día",
+        themeNight: "Noche",
+        primaryChecks: "Verificaciones Principales",
+        hotFoods: "Alimentos Calientes",
+        coldFoods: "Alimentos Fríos",
+        lastMinuteFoods: "Alimentos de Último Minuto",
+        lights: "Enciende las luces: Asegúrate de que el restaurante esté bien iluminado y listo para el día.",
+        gasAppliances: "Revisa todos los aparatos de gas: Verifica que todos los aparatos de gas estén apagados antes de comenzar.",
+        openGasValve: "Abre la válvula principal de gas: Este paso es crucial para encender la cocina de forma segura.",
+        accountFood: "Cuenta toda la comida: Verifica que todo el inventario de alimentos esté presente y contabilizado antes de comenzar el servicio.",
+        cookRice: "Cocina el arroz: Mide 4 tazas de arroz, cocínalo y divídelo en dos grandes contenedores.",
+        boilBeans: "Lleva los frijoles a ebullición: Prepara los frijoles y llévalos a hervir.",
+        hotBuffet: "Prepara el buffet caliente: Llena el lado caliente del buffet con agua nueva del fregadero, enciende el gas de la estufa y enciende. Lleva a una temperatura de vapor, luego reduce a una llama suave.",
+        barbacoa: "Saca la barbacoa: La preparación de la barbacoa se hace la noche anterior (toma 8 horas cocinarla). Colócala al frente.",
+        setColdFoods: "Coloca los alimentos fríos: Todos los alimentos fríos del día anterior (Pico de Gallo, salsa mediana, salsa picante, salsa de maíz, crema blanca (mantecia), lechuga, queso) deben estar listos con nuevos contenedores para el cambio.",
+        setBeans: "Coloca los frijoles: Lleva los frijoles (cocinados la noche anterior) al frente.",
+        prepareChicken: "Prepara el pollo: Aproximadamente 30 minutos antes de abrir, prepara un paquete completo de pollo al frente.",
+        setRice: "Coloca el arroz: Añade cilantro y lima al arroz y mézclalo antes de ponerlo a la vista.",
+        prepareSteak: "Prepara el bistec: El bistec se prepara fresco cuando el primer cliente lo pide.",
+        prepareGuacamole: "Prepara el guacamole: Haz el guacamole un par de minutos antes de abrir siguiendo la receta.",
+        submitChecklist: "Enviar Lista"
+      }
+    };
+    
+    function updateLanguage(lang) {
+      document.querySelectorAll('[data-i18n]').forEach(el => {
+        const key = el.getAttribute('data-i18n');
+        if (translations[lang] && translations[lang][key]) {
+          el.innerText = translations[lang][key];
+        }
+      });
+      const themeLabel = document.getElementById('theme-label');
+      const themeToggle = document.getElementById('theme-toggle');
+      themeLabel.innerText = themeToggle.checked ? translations[lang].themeNight : translations[lang].themeDay;
+    }
+    
+    let currentLanguage = "en";
+    document.getElementById('lang-toggle').addEventListener('change', function() {
+      currentLanguage = this.checked ? "es" : "en";
+      updateLanguage(currentLanguage);
+    });
+    updateLanguage(currentLanguage);
+    
+    // Theme toggle: switch between day and night mode
+    document.getElementById('theme-toggle').addEventListener('change', function () {
+      const themeLabel = document.getElementById('theme-label');
+      if (this.checked) {
+        document.body.classList.add('night-mode');
+        document.body.classList.remove('day-mode');
+        themeLabel.innerText = translations[currentLanguage].themeNight;
+      } else {
+        document.body.classList.add('day-mode');
+        document.body.classList.remove('night-mode');
+        themeLabel.innerText = translations[currentLanguage].themeDay;
+      }
+    });
+  </script>
+</body>
+</html>
