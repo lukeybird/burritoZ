@@ -155,10 +155,16 @@
       background-color: #B22024;
       color: #fff;
     }
+    .emoji {
+      font-size: 2em;
+      margin-right: 10px;
+    }
     .item-text {
       flex: 1;
       font-weight: bold;
       font-size: 0.95em;
+      display: flex;
+      align-items: center;
     }
     .status-display {
       margin-left: 10px;
@@ -261,22 +267,22 @@
         <!-- Primary Checks Section -->
         <h2 data-i18n="primaryChecks">Primary Checks</h2>
         <div class="checklist-item" onclick="toggleItem(this)">
-          <div class="item-text" data-i18n="lights">Turn on the lights: Ensure the restaurant is well-lit and ready for the day.</div>
+          <div class="item-text"><span class="emoji">💡</span><span data-i18n="lights">Turn on the lights: Ensure the restaurant is well-lit and ready for the day.</span></div>
           <span class="status-display" id="lightsStatus_display">FORGOTTEN ❌</span>
           <input type="hidden" id="lightsStatus" name="lightsStatus" value="FORGOTTEN ❌" />
         </div>
         <div class="checklist-item" onclick="toggleItem(this)">
-          <div class="item-text" data-i18n="gasAppliances">Check all gas appliances: Verify that all gas appliances are turned off before starting operations.</div>
+          <div class="item-text"><span class="emoji">🔥</span><span data-i18n="gasAppliances">Check all gas appliances: Verify that all gas appliances are turned off before starting operations.</span></div>
           <span class="status-display" id="gasAppliancesStatus_display">FORGOTTEN ❌</span>
           <input type="hidden" id="gasAppliancesStatus" name="gasAppliancesStatus" value="FORGOTTEN ❌" />
         </div>
         <div class="checklist-item" onclick="toggleItem(this)">
-          <div class="item-text" data-i18n="openGasValve">Open the main gas valve: This step is crucial for safely powering up the kitchen.</div>
+          <div class="item-text"><span class="emoji">💨</span><span data-i18n="openGasValve">Open the main gas valve: This step is crucial for safely powering up the kitchen.</span></div>
           <span class="status-display" id="openGasValveStatus_display">FORGOTTEN ❌</span>
           <input type="hidden" id="openGasValveStatus" name="openGasValveStatus" value="FORGOTTEN ❌" />
         </div>
         <div class="checklist-item" onclick="toggleItem(this)">
-          <div class="item-text" data-i18n="accountFood">Account for all food: Verify that all food inventory is present and accounted for before beginning service.</div>
+          <div class="item-text"><span class="emoji">🍽️</span><span data-i18n="accountFood">Account for all food: Verify that all food inventory is present and accounted for before beginning service.</span></div>
           <span class="status-display" id="accountFoodStatus_display">FORGOTTEN ❌</span>
           <input type="hidden" id="accountFoodStatus" name="accountFoodStatus" value="FORGOTTEN ❌" />
         </div>
@@ -284,22 +290,22 @@
         <!-- Hot Foods Section -->
         <h2 data-i18n="hotFoods">Hot Foods</h2>
         <div class="checklist-item" onclick="toggleItem(this)">
-          <div class="item-text" data-i18n="cookRice">Cook the rice: Measure 4 cups of rice, cook it, and divide it evenly into two big containers.</div>
+          <div class="item-text"><span class="emoji">🍚</span><span data-i18n="cookRice">Cook the rice: Measure 4 cups of rice, cook it, and divide it evenly into two big containers.</span></div>
           <span class="status-display" id="cookRiceStatus_display">FORGOTTEN ❌</span>
           <input type="hidden" id="cookRiceStatus" name="cookRiceStatus" value="FORGOTTEN ❌" />
         </div>
         <div class="checklist-item" onclick="toggleItem(this)">
-          <div class="item-text" data-i18n="boilBeans">Bring the beans to a boil: Prepare the beans and bring them to a boil.</div>
+          <div class="item-text"><span class="emoji">🫘</span><span data-i18n="boilBeans">Bring the beans to a boil: Prepare the beans and bring them to a boil.</span></div>
           <span class="status-display" id="boilBeansStatus_display">FORGOTTEN ❌</span>
           <input type="hidden" id="boilBeansStatus" name="boilBeansStatus" value="FORGOTTEN ❌" />
         </div>
         <div class="checklist-item" onclick="toggleItem(this)">
-          <div class="item-text" data-i18n="hotBuffet">Prepare the hot buffet: Fill the hot side of the buffet with new water from the sink, turn the gas on the stove and ignite. Bring to a steaming temperature, then reduce to a mild flame.</div>
+          <div class="item-text"><span class="emoji">🥘</span><span data-i18n="hotBuffet">Prepare the hot buffet: Fill the hot side of the buffet with new water from the sink, turn the gas on the stove and ignite. Bring to a steaming temperature, then reduce to a mild flame.</span></div>
           <span class="status-display" id="hotBuffetStatus_display">FORGOTTEN ❌</span>
           <input type="hidden" id="hotBuffetStatus" name="hotBuffetStatus" value="FORGOTTEN ❌" />
         </div>
         <div class="checklist-item" onclick="toggleItem(this)">
-          <div class="item-text" data-i18n="barbacoa">Put out the barbacoa: Preparation for the barbacoa is done the night before (takes 8 hours to cook). Put it out in front.</div>
+          <div class="item-text"><span class="emoji">🍖</span><span data-i18n="barbacoa">Put out the barbacoa: Preparation for the barbacoa is done the night before (takes 8 hours to cook). Put it out in front.</span></div>
           <span class="status-display" id="barbacoaStatus_display">FORGOTTEN ❌</span>
           <input type="hidden" id="barbacoaStatus" name="barbacoaStatus" value="FORGOTTEN ❌" />
         </div>
@@ -307,12 +313,12 @@
         <!-- Cold Foods Section -->
         <h2 data-i18n="coldFoods">Cold Foods</h2>
         <div class="checklist-item" onclick="toggleItem(this)">
-          <div class="item-text" data-i18n="setColdFoods">Set out cold foods: All cold foods from the day before (Pico De Gallo, Medium salsa, Hot salsa, Corn salsa, White cream (mantecia), Lettuce, Cheese) must be put out with new containers ready for trade-out.</div>
+          <div class="item-text"><span class="emoji">🥗</span><span data-i18n="setColdFoods">Set out cold foods: All cold foods from the day before (Pico De Gallo, Medium salsa, Hot salsa, Corn salsa, White cream (mantecia), Lettuce, Cheese) must be put out with new containers ready for trade-out.</span></div>
           <span class="status-display" id="setColdFoodsStatus_display">FORGOTTEN ❌</span>
           <input type="hidden" id="setColdFoodsStatus" name="setColdFoodsStatus" value="FORGOTTEN ❌" />
         </div>
         <div class="checklist-item" onclick="toggleItem(this)">
-          <div class="item-text" data-i18n="setBeans">Set out the beans: Bring the beans (cooked from the night before) to the front.</div>
+          <div class="item-text"><span class="emoji">🫘</span><span data-i18n="setBeans">Set out the beans: Bring the beans (cooked from the night before) to the front.</span></div>
           <span class="status-display" id="setBeansStatus_display">FORGOTTEN ❌</span>
           <input type="hidden" id="setBeansStatus" name="setBeansStatus" value="FORGOTTEN ❌" />
         </div>
@@ -320,22 +326,22 @@
         <!-- Last Minute Foods Section -->
         <h2 data-i18n="lastMinuteFoods">Last Minute Foods</h2>
         <div class="checklist-item" onclick="toggleItem(this)">
-          <div class="item-text" data-i18n="prepareChicken">Prepare the chicken: About 30 minutes prior to opening, prepare a whole pack of chicken in front.</div>
+          <div class="item-text"><span class="emoji">🍗</span><span data-i18n="prepareChicken">Prepare the chicken: About 30 minutes prior to opening, prepare a whole pack of chicken in front.</span></div>
           <span class="status-display" id="prepareChickenStatus_display">FORGOTTEN ❌</span>
           <input type="hidden" id="prepareChickenStatus" name="prepareChickenStatus" value="FORGOTTEN ❌" />
         </div>
         <div class="checklist-item" onclick="toggleItem(this)">
-          <div class="item-text" data-i18n="setRice">Set out the rice: Add cilantro and lime to the rice and mix it before placing it out.</div>
+          <div class="item-text"><span class="emoji">🍚</span><span data-i18n="setRice">Set out the rice: Add cilantro and lime to the rice and mix it before placing it out.</span></div>
           <span class="status-display" id="setRiceStatus_display">FORGOTTEN ❌</span>
           <input type="hidden" id="setRiceStatus" name="setRiceStatus" value="FORGOTTEN ❌" />
         </div>
         <div class="checklist-item" onclick="toggleItem(this)">
-          <div class="item-text" data-i18n="prepareSteak">Prepare the steak: Steak is made fresh when the first customer asks for it.</div>
+          <div class="item-text"><span class="emoji">🥩</span><span data-i18n="prepareSteak">Prepare the steak: Steak is made fresh when the first customer asks for it.</span></div>
           <span class="status-display" id="prepareSteakStatus_display">FORGOTTEN ❌</span>
           <input type="hidden" id="prepareSteakStatus" name="prepareSteakStatus" value="FORGOTTEN ❌" />
         </div>
         <div class="checklist-item" onclick="toggleItem(this)">
-          <div class="item-text" data-i18n="prepareGuacamole">Prepare the guacamole: Make the guacamole a couple of minutes before opening following the recipe.</div>
+          <div class="item-text"><span class="emoji">🥑</span><span data-i18n="prepareGuacamole">Prepare the guacamole: Make the guacamole a couple of minutes before opening following the recipe.</span></div>
           <span class="status-display" id="prepareGuacamoleStatus_display">FORGOTTEN ❌</span>
           <input type="hidden" id="prepareGuacamoleStatus" name="prepareGuacamoleStatus" value="FORGOTTEN ❌" />
         </div>
@@ -464,6 +470,21 @@
         themeLabel.innerText = translations[currentLanguage].themeDay;
       }
     });
+    
+    // On form submission, update any hidden fields that haven't been toggled.
+    function recordSubmissionStatus() {
+      document.getElementById('submissionTime').value = new Date().toLocaleTimeString();
+      const hiddenInputs = document.querySelectorAll("input[type='hidden']");
+      hiddenInputs.forEach(function(input) {
+        if (!input.value) {
+          input.value = "FORGOTTEN ❌";
+          const displaySpan = document.getElementById(input.id + "_display");
+          if (displaySpan) {
+            displaySpan.innerText = "FORGOTTEN ❌";
+          }
+        }
+      });
+    }
   </script>
 </body>
 </html>
