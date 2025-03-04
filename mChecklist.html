@@ -24,7 +24,7 @@
       top: 0;
       left: 0;
       width: 100%;
-      padding: 20px;
+      padding: 15px 10px;
       display: flex;
       align-items: center;
       justify-content: space-between;
@@ -41,26 +41,26 @@
     }
     .header .left img {
       max-height: 40px;
-      height: auto;
       width: auto;
       object-fit: contain;
     }
     .header .center {
-      font-size: calc(16px + 1vw);
+      font-size: 1.8em;
       font-weight: bold;
       text-align: center;
     }
     .header .right {
       display: flex;
       align-items: center;
-      gap: 16px;
+      gap: 12px;
     }
+    
     /* Toggle Switches */
     .theme-toggle,
     .language-toggle {
       display: flex;
       align-items: center;
-      gap: 8px;
+      gap: 5px;
       font-weight: bold;
       font-size: 0.9em;
       color: inherit;
@@ -68,8 +68,8 @@
     .switch {
       position: relative;
       display: inline-block;
-      width: 60px;
-      height: 34px;
+      width: 50px;
+      height: 28px;
     }
     .switch input {
       opacity: 0;
@@ -82,15 +82,15 @@
       top: 0; left: 0; right: 0; bottom: 0;
       background-color: #ccc;
       transition: 0.4s;
-      border-radius: 34px;
+      border-radius: 28px;
     }
     .slider:before {
       position: absolute;
       content: "";
-      height: 26px;
-      width: 26px;
-      left: 4px;
-      bottom: 4px;
+      height: 22px;
+      width: 22px;
+      left: 3px;
+      bottom: 3px;
       background-color: #fff;
       transition: 0.4s;
       border-radius: 50%;
@@ -101,19 +101,19 @@
     }
     #theme-toggle:checked + .slider:before,
     #lang-toggle:checked + .slider:before {
-      transform: translateX(26px);
+      transform: translateX(22px);
     }
     
     /* Main Content Wrapper */
     .content-wrapper {
-      padding-top: 100px;
-      margin: 20px;
+      padding-top: 90px;
+      margin: 10px;
     }
     .application-container {
-      max-width: 900px;
-      margin: 20px auto;
-      padding: 20px;
-      border-radius: 10px;
+      max-width: 600px;
+      margin: 0 auto;
+      padding: 15px;
+      border-radius: 8px;
       overflow: hidden;
     }
     body.day-mode .application-container {
@@ -125,14 +125,14 @@
       color: #fff;
     }
     
-    /* Form and Checklist Item Styles */
+    /* Form Styles */
     form {
       display: flex;
       flex-direction: column;
     }
     form h2 {
-      margin-top: 30px;
-      font-size: 1.5em;
+      margin-top: 20px;
+      font-size: 1.4em;
       border-bottom: 2px solid #B22024;
       padding-bottom: 5px;
     }
@@ -140,8 +140,8 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
-      margin: 15px 0;
-      padding: 15px;
+      margin: 10px 0;
+      padding: 12px;
       border: 2px solid #B22024;
       border-radius: 8px;
       cursor: pointer;
@@ -157,20 +157,21 @@
     .item-text {
       flex: 1;
       font-weight: bold;
+      font-size: 0.95em;
     }
     .status-display {
-      margin-left: 15px;
+      margin-left: 10px;
       font-size: 0.9em;
-      min-width: 120px;
+      min-width: 100px;
       text-align: right;
     }
-    /* Hide the default checkbox (we use the container as the toggle) */
+    /* Hide the default checkbox */
     .checklist-item input[type="checkbox"] {
       display: none;
     }
     form button {
-      margin-top: 30px;
-      padding: 15px;
+      margin-top: 20px;
+      padding: 12px;
       background-color: #B22024;
       border: none;
       color: #fff;
@@ -183,12 +184,16 @@
       background-color: #8C1F1F;
     }
     
-    /* Mobile adjustments */
+    /* Mobile-specific adjustments */
     @media (max-width: 600px) {
-      .header .center { font-size: 20px; }
+      .header { padding: 10px; }
+      .header .center { font-size: 1.5em; }
+      .application-container { padding: 10px; }
       form h2 { font-size: 1.3em; }
-      .checklist-item { padding: 12px; margin: 10px 0; }
-      .status-display { font-size: 0.8em; min-width: 100px; }
+      .checklist-item { padding: 10px; }
+      .item-text { font-size: 0.9em; }
+      .status-display { font-size: 0.8em; min-width: 80px; }
+      form button { font-size: 0.9em; padding: 10px; }
     }
   </style>
 </head>
@@ -221,7 +226,6 @@
   <div class="content-wrapper">
     <div class="application-container">
       <form id="mChecklistForm" action="https://formspree.io/f/xnnjkgae" method="POST" onsubmit="recordSubmissionStatus()">
-        
         <!-- Primary Checks Section -->
         <h2 data-i18n="primaryChecks">Primary Checks</h2>
         <div class="checklist-item" onclick="toggleItem(this)">
@@ -313,7 +317,7 @@
   </div>
   
   <script>
-    // Function to toggle a checklist item (acting like a button)
+    // Function to toggle a checklist item and update its status.
     function toggleItem(item) {
       // Toggle the "selected" class on the container
       item.classList.toggle("selected");
@@ -332,9 +336,9 @@
       }
     }
     
-    // On form submission, update any checklist items that haven't been toggled
+    // On form submission, update any hidden fields that haven't been toggled.
     function recordSubmissionStatus() {
-      // Record submission time (if needed)
+      // Record submission time if needed
       document.getElementById('submissionTime').value = new Date().toLocaleTimeString();
       
       // For each hidden input, if its value is empty, set it to "FORGOTTEN ❌"
@@ -342,6 +346,7 @@
       hiddenInputs.forEach(function(input) {
         if (!input.value) {
           input.value = "FORGOTTEN ❌";
+          // Update the display span if necessary
           const displaySpan = document.getElementById(input.id + "_display");
           if (displaySpan) {
             displaySpan.innerText = "FORGOTTEN ❌";
@@ -436,6 +441,35 @@
         themeLabel.innerText = translations[currentLanguage].themeDay;
       }
     });
+    
+    // When a checklist item is tapped, toggle its state and update the hidden field and display.
+    function toggleItem(item) {
+      item.classList.toggle("selected");
+      const hiddenInput = item.querySelector("input[type='hidden']");
+      const displaySpan = item.querySelector(".status-display");
+      if (item.classList.contains("selected")) {
+        hiddenInput.value = "CHECKED ✅";
+        displaySpan.innerText = "CHECKED ✅";
+      } else {
+        hiddenInput.value = "FORGOTTEN ❌";
+        displaySpan.innerText = "FORGOTTEN ❌";
+      }
+    }
+    
+    // On form submission, update any hidden fields that haven't been toggled.
+    function recordSubmissionStatus() {
+      document.getElementById('submissionTime').value = new Date().toLocaleTimeString();
+      const hiddenInputs = document.querySelectorAll("input[type='hidden']");
+      hiddenInputs.forEach(function(input) {
+        if (!input.value) {
+          input.value = "FORGOTTEN ❌";
+          const displaySpan = document.getElementById(input.id + "_display");
+          if (displaySpan) {
+            displaySpan.innerText = "FORGOTTEN ❌";
+          }
+        }
+      });
+    }
   </script>
 </body>
 </html>
