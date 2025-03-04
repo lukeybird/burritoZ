@@ -6,7 +6,8 @@
   <title data-i18n="headerTitle">Morning Checklist</title>
   <style>
     /* Global Reset */
-    * { box-sizing: border-box; }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    
     /* Base Styles for Day and Night Modes */
     body.day-mode {
       background-color: #F4ECC2;
@@ -16,6 +17,7 @@
       background-color: #121212;
       color: #fff;
     }
+    
     /* Fixed Header */
     .header {
       position: fixed;
@@ -53,7 +55,7 @@
       align-items: center;
       gap: 16px;
     }
-    /* Theme & Language Toggle Switches */
+    /* Toggle Switches */
     .theme-toggle,
     .language-toggle {
       display: flex;
@@ -101,12 +103,12 @@
     #lang-toggle:checked + .slider:before {
       transform: translateX(26px);
     }
+    
     /* Main Content Wrapper */
     .content-wrapper {
       padding-top: 100px;
       margin: 20px;
     }
-    /* Application Container */
     .application-container {
       max-width: 900px;
       margin: 20px auto;
@@ -122,7 +124,8 @@
       background: #1F1F1F;
       color: #fff;
     }
-    /* Form Styles */
+    
+    /* Form and Checklist Item Styles */
     form {
       display: flex;
       flex-direction: column;
@@ -136,27 +139,34 @@
     .checklist-item {
       display: flex;
       align-items: center;
+      justify-content: space-between;
       margin: 15px 0;
-      padding: 10px;
+      padding: 15px;
       border: 2px solid #B22024;
       border-radius: 8px;
+      cursor: pointer;
+      transition: background-color 0.3s, transform 0.2s;
     }
-    .checklist-item label {
+    .checklist-item:hover {
+      transform: scale(1.02);
+    }
+    .checklist-item.selected {
+      background-color: #B22024;
+      color: #fff;
+    }
+    .item-text {
       flex: 1;
       font-weight: bold;
-      cursor: pointer;
     }
-    .checklist-item input[type="checkbox"] {
-      margin-right: 15px;
-      transform: scale(1.5);
-      cursor: pointer;
-    }
-    /* Display for status */
-    .timestamp {
+    .status-display {
       margin-left: 15px;
       font-size: 0.9em;
-      color: #B22024;
-      min-width: 100px;
+      min-width: 120px;
+      text-align: right;
+    }
+    /* Hide the default checkbox (we use the container as the toggle) */
+    .checklist-item input[type="checkbox"] {
+      display: none;
     }
     form button {
       margin-top: 30px;
@@ -172,6 +182,14 @@
     form button:hover {
       background-color: #8C1F1F;
     }
+    
+    /* Mobile adjustments */
+    @media (max-width: 600px) {
+      .header .center { font-size: 20px; }
+      form h2 { font-size: 1.3em; }
+      .checklist-item { padding: 12px; margin: 10px 0; }
+      .status-display { font-size: 0.8em; min-width: 100px; }
+    }
   </style>
 </head>
 <body class="night-mode">
@@ -182,7 +200,6 @@
     </div>
     <div class="center" data-i18n="headerTitle">Morning Checklist</div>
     <div class="right">
-      <!-- Theme Toggle Switch -->
       <div class="theme-toggle">
         <label for="theme-toggle" id="theme-label">Night</label>
         <label class="switch">
@@ -190,7 +207,6 @@
           <span class="slider"></span>
         </label>
       </div>
-      <!-- Language Toggle Switch -->
       <div class="language-toggle">
         <label for="lang-toggle" data-i18n="languageStatus">English</label>
         <label class="switch">
@@ -201,104 +217,91 @@
     </div>
   </div>
   
-  <!-- Main Content Wrapper -->
+  <!-- Main Content -->
   <div class="content-wrapper">
     <div class="application-container">
-      <form id="mChecklistForm" action="https://formspree.io/f/xnnjkgae" method="POST" onsubmit="recordSubmissionTime()">
+      <form id="mChecklistForm" action="https://formspree.io/f/xnnjkgae" method="POST" onsubmit="recordSubmissionStatus()">
+        
         <!-- Primary Checks Section -->
         <h2 data-i18n="primaryChecks">Primary Checks</h2>
-        <div class="checklist-item">
-          <input type="checkbox" id="lights" name="lights" onchange="recordTime(this, 'lightsStatus', 'lightsStatus_display')" />
-          <label for="lights" data-i18n="lights">Turn on the lights: Ensure the restaurant is well-lit and ready for the day.</label>
-          <span class="timestamp" id="lightsStatus_display"></span>
-          <input type="hidden" id="lightsStatus" name="lightsStatus" />
+        <div class="checklist-item" onclick="toggleItem(this)">
+          <div class="item-text" data-i18n="lights">Turn on the lights: Ensure the restaurant is well-lit and ready for the day.</div>
+          <span class="status-display" id="lightsStatus_display">FORGOTTEN ❌</span>
+          <input type="hidden" id="lightsStatus" name="lightsStatus" value="FORGOTTEN ❌" />
         </div>
-        <div class="checklist-item">
-          <input type="checkbox" id="gasAppliances" name="gasAppliances" onchange="recordTime(this, 'gasAppliancesStatus', 'gasAppliancesStatus_display')" />
-          <label for="gasAppliances" data-i18n="gasAppliances">Check all gas appliances: Verify that all gas appliances are turned off before starting operations.</label>
-          <span class="timestamp" id="gasAppliancesStatus_display"></span>
-          <input type="hidden" id="gasAppliancesStatus" name="gasAppliancesStatus" />
+        <div class="checklist-item" onclick="toggleItem(this)">
+          <div class="item-text" data-i18n="gasAppliances">Check all gas appliances: Verify that all gas appliances are turned off before starting operations.</div>
+          <span class="status-display" id="gasAppliancesStatus_display">FORGOTTEN ❌</span>
+          <input type="hidden" id="gasAppliancesStatus" name="gasAppliancesStatus" value="FORGOTTEN ❌" />
         </div>
-        <div class="checklist-item">
-          <input type="checkbox" id="openGasValve" name="openGasValve" onchange="recordTime(this, 'openGasValveStatus', 'openGasValveStatus_display')" />
-          <label for="openGasValve" data-i18n="openGasValve">Open the main gas valve: This step is crucial for safely powering up the kitchen.</label>
-          <span class="timestamp" id="openGasValveStatus_display"></span>
-          <input type="hidden" id="openGasValveStatus" name="openGasValveStatus" />
+        <div class="checklist-item" onclick="toggleItem(this)">
+          <div class="item-text" data-i18n="openGasValve">Open the main gas valve: This step is crucial for safely powering up the kitchen.</div>
+          <span class="status-display" id="openGasValveStatus_display">FORGOTTEN ❌</span>
+          <input type="hidden" id="openGasValveStatus" name="openGasValveStatus" value="FORGOTTEN ❌" />
         </div>
-        <div class="checklist-item">
-          <input type="checkbox" id="accountFood" name="accountFood" onchange="recordTime(this, 'accountFoodStatus', 'accountFoodStatus_display')" />
-          <label for="accountFood" data-i18n="accountFood">Account for all food: Verify that all food inventory is present and accounted for before beginning service.</label>
-          <span class="timestamp" id="accountFoodStatus_display"></span>
-          <input type="hidden" id="accountFoodStatus" name="accountFoodStatus" />
+        <div class="checklist-item" onclick="toggleItem(this)">
+          <div class="item-text" data-i18n="accountFood">Account for all food: Verify that all food inventory is present and accounted for before beginning service.</div>
+          <span class="status-display" id="accountFoodStatus_display">FORGOTTEN ❌</span>
+          <input type="hidden" id="accountFoodStatus" name="accountFoodStatus" value="FORGOTTEN ❌" />
         </div>
         
         <!-- Hot Foods Section -->
         <h2 data-i18n="hotFoods">Hot Foods</h2>
-        <div class="checklist-item">
-          <input type="checkbox" id="cookRice" name="cookRice" onchange="recordTime(this, 'cookRiceStatus', 'cookRiceStatus_display')" />
-          <label for="cookRice" data-i18n="cookRice">Cook the rice: Measure 4 cups of rice, cook it, and divide it evenly into two big containers.</label>
-          <span class="timestamp" id="cookRiceStatus_display"></span>
-          <input type="hidden" id="cookRiceStatus" name="cookRiceStatus" />
+        <div class="checklist-item" onclick="toggleItem(this)">
+          <div class="item-text" data-i18n="cookRice">Cook the rice: Measure 4 cups of rice, cook it, and divide it evenly into two big containers.</div>
+          <span class="status-display" id="cookRiceStatus_display">FORGOTTEN ❌</span>
+          <input type="hidden" id="cookRiceStatus" name="cookRiceStatus" value="FORGOTTEN ❌" />
         </div>
-        <div class="checklist-item">
-          <input type="checkbox" id="boilBeans" name="boilBeans" onchange="recordTime(this, 'boilBeansStatus', 'boilBeansStatus_display')" />
-          <label for="boilBeans" data-i18n="boilBeans">Bring the beans to a boil: Prepare the beans and bring them to a boil.</label>
-          <span class="timestamp" id="boilBeansStatus_display"></span>
-          <input type="hidden" id="boilBeansStatus" name="boilBeansStatus" />
+        <div class="checklist-item" onclick="toggleItem(this)">
+          <div class="item-text" data-i18n="boilBeans">Bring the beans to a boil: Prepare the beans and bring them to a boil.</div>
+          <span class="status-display" id="boilBeansStatus_display">FORGOTTEN ❌</span>
+          <input type="hidden" id="boilBeansStatus" name="boilBeansStatus" value="FORGOTTEN ❌" />
         </div>
-        <div class="checklist-item">
-          <input type="checkbox" id="hotBuffet" name="hotBuffet" onchange="recordTime(this, 'hotBuffetStatus', 'hotBuffetStatus_display')" />
-          <label for="hotBuffet" data-i18n="hotBuffet">Prepare the hot buffet: Fill the hot side of the buffet with new water from the sink, turn the gas on the stove and ignite. Bring to a steaming temperature, then reduce to a mild flame.</label>
-          <span class="timestamp" id="hotBuffetStatus_display"></span>
-          <input type="hidden" id="hotBuffetStatus" name="hotBuffetStatus" />
+        <div class="checklist-item" onclick="toggleItem(this)">
+          <div class="item-text" data-i18n="hotBuffet">Prepare the hot buffet: Fill the hot side of the buffet with new water from the sink, turn the gas on the stove and ignite. Bring to a steaming temperature, then reduce to a mild flame.</div>
+          <span class="status-display" id="hotBuffetStatus_display">FORGOTTEN ❌</span>
+          <input type="hidden" id="hotBuffetStatus" name="hotBuffetStatus" value="FORGOTTEN ❌" />
         </div>
-        <div class="checklist-item">
-          <input type="checkbox" id="barbacoa" name="barbacoa" onchange="recordTime(this, 'barbacoaStatus', 'barbacoaStatus_display')" />
-          <label for="barbacoa" data-i18n="barbacoa">Put out the barbacoa: Preparation for the barbacoa is done the night before (takes 8 hours to cook). Put it out in front.</label>
-          <span class="timestamp" id="barbacoaStatus_display"></span>
-          <input type="hidden" id="barbacoaStatus" name="barbacoaStatus" />
+        <div class="checklist-item" onclick="toggleItem(this)">
+          <div class="item-text" data-i18n="barbacoa">Put out the barbacoa: Preparation for the barbacoa is done the night before (takes 8 hours to cook). Put it out in front.</div>
+          <span class="status-display" id="barbacoaStatus_display">FORGOTTEN ❌</span>
+          <input type="hidden" id="barbacoaStatus" name="barbacoaStatus" value="FORGOTTEN ❌" />
         </div>
         
         <!-- Cold Foods Section -->
         <h2 data-i18n="coldFoods">Cold Foods</h2>
-        <div class="checklist-item">
-          <input type="checkbox" id="setColdFoods" name="setColdFoods" onchange="recordTime(this, 'setColdFoodsStatus', 'setColdFoodsStatus_display')" />
-          <label for="setColdFoods" data-i18n="setColdFoods">Set out cold foods: All cold foods from the day before (Pico De Gallo, Medium salsa, Hot salsa, Corn salsa, White cream (mantecia), Lettuce, Cheese) must be put out with new containers ready for trade-out.</label>
-          <span class="timestamp" id="setColdFoodsStatus_display"></span>
-          <input type="hidden" id="setColdFoodsStatus" name="setColdFoodsStatus" />
+        <div class="checklist-item" onclick="toggleItem(this)">
+          <div class="item-text" data-i18n="setColdFoods">Set out cold foods: All cold foods from the day before (Pico De Gallo, Medium salsa, Hot salsa, Corn salsa, White cream (mantecia), Lettuce, Cheese) must be put out with new containers ready for trade-out.</div>
+          <span class="status-display" id="setColdFoodsStatus_display">FORGOTTEN ❌</span>
+          <input type="hidden" id="setColdFoodsStatus" name="setColdFoodsStatus" value="FORGOTTEN ❌" />
         </div>
-        <div class="checklist-item">
-          <input type="checkbox" id="setBeans" name="setBeans" onchange="recordTime(this, 'setBeansStatus', 'setBeansStatus_display')" />
-          <label for="setBeans" data-i18n="setBeans">Set out the beans: Bring the beans (cooked from the night before) to the front.</label>
-          <span class="timestamp" id="setBeansStatus_display"></span>
-          <input type="hidden" id="setBeansStatus" name="setBeansStatus" />
+        <div class="checklist-item" onclick="toggleItem(this)">
+          <div class="item-text" data-i18n="setBeans">Set out the beans: Bring the beans (cooked from the night before) to the front.</div>
+          <span class="status-display" id="setBeansStatus_display">FORGOTTEN ❌</span>
+          <input type="hidden" id="setBeansStatus" name="setBeansStatus" value="FORGOTTEN ❌" />
         </div>
         
         <!-- Last Minute Foods Section -->
         <h2 data-i18n="lastMinuteFoods">Last Minute Foods</h2>
-        <div class="checklist-item">
-          <input type="checkbox" id="prepareChicken" name="prepareChicken" onchange="recordTime(this, 'prepareChickenStatus', 'prepareChickenStatus_display')" />
-          <label for="prepareChicken" data-i18n="prepareChicken">Prepare the chicken: About 30 minutes prior to opening, prepare a whole pack of chicken in front.</label>
-          <span class="timestamp" id="prepareChickenStatus_display"></span>
-          <input type="hidden" id="prepareChickenStatus" name="prepareChickenStatus" />
+        <div class="checklist-item" onclick="toggleItem(this)">
+          <div class="item-text" data-i18n="prepareChicken">Prepare the chicken: About 30 minutes prior to opening, prepare a whole pack of chicken in front.</div>
+          <span class="status-display" id="prepareChickenStatus_display">FORGOTTEN ❌</span>
+          <input type="hidden" id="prepareChickenStatus" name="prepareChickenStatus" value="FORGOTTEN ❌" />
         </div>
-        <div class="checklist-item">
-          <input type="checkbox" id="setRice" name="setRice" onchange="recordTime(this, 'setRiceStatus', 'setRiceStatus_display')" />
-          <label for="setRice" data-i18n="setRice">Set out the rice: Add cilantro and lime to the rice and mix it before placing it out.</label>
-          <span class="timestamp" id="setRiceStatus_display"></span>
-          <input type="hidden" id="setRiceStatus" name="setRiceStatus" />
+        <div class="checklist-item" onclick="toggleItem(this)">
+          <div class="item-text" data-i18n="setRice">Set out the rice: Add cilantro and lime to the rice and mix it before placing it out.</div>
+          <span class="status-display" id="setRiceStatus_display">FORGOTTEN ❌</span>
+          <input type="hidden" id="setRiceStatus" name="setRiceStatus" value="FORGOTTEN ❌" />
         </div>
-        <div class="checklist-item">
-          <input type="checkbox" id="prepareSteak" name="prepareSteak" onchange="recordTime(this, 'prepareSteakStatus', 'prepareSteakStatus_display')" />
-          <label for="prepareSteak" data-i18n="prepareSteak">Prepare the steak: Steak is made fresh when the first customer asks for it.</label>
-          <span class="timestamp" id="prepareSteakStatus_display"></span>
-          <input type="hidden" id="prepareSteakStatus" name="prepareSteakStatus" />
+        <div class="checklist-item" onclick="toggleItem(this)">
+          <div class="item-text" data-i18n="prepareSteak">Prepare the steak: Steak is made fresh when the first customer asks for it.</div>
+          <span class="status-display" id="prepareSteakStatus_display">FORGOTTEN ❌</span>
+          <input type="hidden" id="prepareSteakStatus" name="prepareSteakStatus" value="FORGOTTEN ❌" />
         </div>
-        <div class="checklist-item">
-          <input type="checkbox" id="prepareGuacamole" name="prepareGuacamole" onchange="recordTime(this, 'prepareGuacamoleStatus', 'prepareGuacamoleStatus_display')" />
-          <label for="prepareGuacamole" data-i18n="prepareGuacamole">Prepare the guacamole: Make the guacamole a couple of minutes before opening following the recipe.</label>
-          <span class="timestamp" id="prepareGuacamoleStatus_display"></span>
-          <input type="hidden" id="prepareGuacamoleStatus" name="prepareGuacamoleStatus" />
+        <div class="checklist-item" onclick="toggleItem(this)">
+          <div class="item-text" data-i18n="prepareGuacamole">Prepare the guacamole: Make the guacamole a couple of minutes before opening following the recipe.</div>
+          <span class="status-display" id="prepareGuacamoleStatus_display">FORGOTTEN ❌</span>
+          <input type="hidden" id="prepareGuacamoleStatus" name="prepareGuacamoleStatus" value="FORGOTTEN ❌" />
         </div>
         
         <!-- Hidden field for submission time -->
@@ -310,39 +313,38 @@
   </div>
   
   <script>
-    // Function to record status for a checklist item when checked/unchecked.
-    // When checked, it records "CHECKED ✅ - [timestamp]".
-    // When unchecked, it records "FORGOTTEN ❌ - [timestamp]".
-    function recordTime(checkbox, hiddenFieldId, displayFieldId) {
-      const hiddenField = document.getElementById(hiddenFieldId);
-      const displayField = document.getElementById(displayFieldId);
-      const now = new Date().toLocaleTimeString();
-      if (checkbox.checked) {
-        const value = "CHECKED ✅ - " + now;
-        hiddenField.value = value;
-        displayField.innerText = value;
+    // Function to toggle a checklist item (acting like a button)
+    function toggleItem(item) {
+      // Toggle the "selected" class on the container
+      item.classList.toggle("selected");
+      
+      // Find the hidden input and display span inside this item
+      const hiddenInput = item.querySelector("input[type='hidden']");
+      const displaySpan = item.querySelector(".status-display");
+      
+      // Update status based on whether the container has the "selected" class
+      if (item.classList.contains("selected")) {
+        hiddenInput.value = "CHECKED ✅";
+        displaySpan.innerText = "CHECKED ✅";
       } else {
-        const value = "FORGOTTEN ❌ - " + now;
-        hiddenField.value = value;
-        displayField.innerText = value;
+        hiddenInput.value = "FORGOTTEN ❌";
+        displaySpan.innerText = "FORGOTTEN ❌";
       }
     }
     
-    // Record submission time and update any checklist items that have not been toggled.
-    function recordSubmissionTime() {
-      const submissionTime = new Date().toLocaleTimeString();
-      const submissionField = document.getElementById('submissionTime');
-      submissionField.value = submissionTime;
+    // On form submission, update any checklist items that haven't been toggled
+    function recordSubmissionStatus() {
+      // Record submission time (if needed)
+      document.getElementById('submissionTime').value = new Date().toLocaleTimeString();
       
-      // For each hidden input that begins with "time", if its value is empty, update it.
-      const hiddenInputs = document.querySelectorAll("input[type='hidden'][id$='Status']");
+      // For each hidden input, if its value is empty, set it to "FORGOTTEN ❌"
+      const hiddenInputs = document.querySelectorAll("input[type='hidden']");
       hiddenInputs.forEach(function(input) {
         if (!input.value) {
-          input.value = "FORGOTTEN ❌ - " + submissionTime;
-          // Also update the display span if desired.
+          input.value = "FORGOTTEN ❌";
           const displaySpan = document.getElementById(input.id + "_display");
           if (displaySpan) {
-            displaySpan.innerText = "FORGOTTEN ❌ - " + submissionTime;
+            displaySpan.innerText = "FORGOTTEN ❌";
           }
         }
       });
