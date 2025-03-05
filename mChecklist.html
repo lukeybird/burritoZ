@@ -107,7 +107,7 @@
     
     /* Main Content Wrapper */
     .content-wrapper {
-      padding-top: 90px;
+      padding-top: 150px;
       margin: 10px;
     }
     .application-container {
@@ -130,6 +130,22 @@
     form {
       display: flex;
       flex-direction: column;
+    }
+    /* Name Input */
+    .form-group {
+      margin-bottom: 20px;
+    }
+    .form-group label {
+      font-weight: bold;
+      margin-bottom: 5px;
+      display: block;
+    }
+    .form-group input[type="text"] {
+      width: 100%;
+      padding: 10px;
+      font-size: 1em;
+      border: 2px solid #B22024;
+      border-radius: 4px;
     }
     form h2 {
       margin-top: 20px;
@@ -169,7 +185,7 @@
     .status-display {
       margin-left: 10px;
       font-size: 0.9em;
-      min-width: 100px;
+      min-width: 120px;
       text-align: right;
     }
     /* Hide the default checkbox */
@@ -191,7 +207,51 @@
       background-color: #8C1F1F;
     }
     
-    /* Mobile-specific adjustments */
+    /* Modal Styles */
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 2000;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      overflow: auto;
+      background-color: rgba(0, 0, 0, 0.7);
+    }
+    .modal-content {
+      background-color: #1F1F1F;
+      color: #fff;
+      margin: 30% auto;
+      padding: 20px;
+      border: 2px solid #B22024;
+      border-radius: 8px;
+      max-width: 90%;
+      text-align: center;
+    }
+    .modal-buttons {
+      margin-top: 20px;
+      display: flex;
+      justify-content: space-around;
+    }
+    .modal-buttons button {
+      padding: 10px 20px;
+      font-size: 1em;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+    .modal-buttons button.cancel {
+      background-color: #660000;
+      color: #fff;
+    }
+    .modal-buttons button.confirm {
+      background-color: #B22024;
+      color: #fff;
+    }
+    
+    /* Mobile-specific adjustments: Stack header elements vertically */
     @media (max-width: 600px) {
       .header {
         flex-direction: column;
@@ -205,10 +265,6 @@
       }
       .header .center {
         font-size: 1.5em;
-      }
-      /* Increase top padding so the first title is visible */
-      .content-wrapper {
-        padding-top: 150px;
       }
       .application-container {
         padding: 10px;
@@ -259,29 +315,45 @@
     </div>
   </div>
   
+  <!-- Modal for Confirmation -->
+  <div id="confirmationModal" class="modal">
+    <div class="modal-content">
+      <p id="modalMessage">Are you sure you'd like to remove this task?</p>
+      <div class="modal-buttons">
+        <button class="cancel" id="cancelButton">❌ Cancel</button>
+        <button class="confirm" id="confirmButton">✅ Confirm</button>
+      </div>
+    </div>
+  </div>
+  
   <!-- Main Content -->
   <div class="content-wrapper">
     <div class="application-container">
       <form id="mChecklistForm" action="https://formspree.io/f/xnnjkgae" method="POST" onsubmit="recordSubmissionStatus()">
+        <!-- Name Input -->
+        <div class="form-group">
+          <label for="userName" data-i18n="name">Name</label>
+          <input type="text" id="userName" name="userName" required />
+        </div>
         
         <!-- Primary Checks Section -->
         <h2 data-i18n="primaryChecks">Primary Checks</h2>
-        <div class="checklist-item" onclick="toggleItem(this)">
+        <div class="checklist-item" data-task="Turn on the lights">
           <div class="item-text"><span class="emoji">💡</span><span data-i18n="lights">Turn on the lights: Ensure the restaurant is well-lit and ready for the day.</span></div>
           <span class="status-display" id="lightsStatus_display">FORGOTTEN ❌</span>
           <input type="hidden" id="lightsStatus" name="lightsStatus" value="FORGOTTEN ❌" />
         </div>
-        <div class="checklist-item" onclick="toggleItem(this)">
+        <div class="checklist-item" data-task="Check all gas appliances">
           <div class="item-text"><span class="emoji">🔥</span><span data-i18n="gasAppliances">Check all gas appliances: Verify that all gas appliances are turned off before starting operations.</span></div>
           <span class="status-display" id="gasAppliancesStatus_display">FORGOTTEN ❌</span>
           <input type="hidden" id="gasAppliancesStatus" name="gasAppliancesStatus" value="FORGOTTEN ❌" />
         </div>
-        <div class="checklist-item" onclick="toggleItem(this)">
+        <div class="checklist-item" data-task="Open the main gas valve">
           <div class="item-text"><span class="emoji">💨</span><span data-i18n="openGasValve">Open the main gas valve: This step is crucial for safely powering up the kitchen.</span></div>
           <span class="status-display" id="openGasValveStatus_display">FORGOTTEN ❌</span>
           <input type="hidden" id="openGasValveStatus" name="openGasValveStatus" value="FORGOTTEN ❌" />
         </div>
-        <div class="checklist-item" onclick="toggleItem(this)">
+        <div class="checklist-item" data-task="Account for all food">
           <div class="item-text"><span class="emoji">🍽️</span><span data-i18n="accountFood">Account for all food: Verify that all food inventory is present and accounted for before beginning service.</span></div>
           <span class="status-display" id="accountFoodStatus_display">FORGOTTEN ❌</span>
           <input type="hidden" id="accountFoodStatus" name="accountFoodStatus" value="FORGOTTEN ❌" />
@@ -289,22 +361,22 @@
         
         <!-- Hot Foods Section -->
         <h2 data-i18n="hotFoods">Hot Foods</h2>
-        <div class="checklist-item" onclick="toggleItem(this)">
+        <div class="checklist-item" data-task="Cook the rice">
           <div class="item-text"><span class="emoji">🍚</span><span data-i18n="cookRice">Cook the rice: Measure 4 cups of rice, cook it, and divide it evenly into two big containers.</span></div>
           <span class="status-display" id="cookRiceStatus_display">FORGOTTEN ❌</span>
           <input type="hidden" id="cookRiceStatus" name="cookRiceStatus" value="FORGOTTEN ❌" />
         </div>
-        <div class="checklist-item" onclick="toggleItem(this)">
+        <div class="checklist-item" data-task="Bring the beans to a boil">
           <div class="item-text"><span class="emoji">🫘</span><span data-i18n="boilBeans">Bring the beans to a boil: Prepare the beans and bring them to a boil.</span></div>
           <span class="status-display" id="boilBeansStatus_display">FORGOTTEN ❌</span>
           <input type="hidden" id="boilBeansStatus" name="boilBeansStatus" value="FORGOTTEN ❌" />
         </div>
-        <div class="checklist-item" onclick="toggleItem(this)">
+        <div class="checklist-item" data-task="Prepare the hot buffet">
           <div class="item-text"><span class="emoji">🥘</span><span data-i18n="hotBuffet">Prepare the hot buffet: Fill the hot side of the buffet with new water from the sink, turn the gas on the stove and ignite. Bring to a steaming temperature, then reduce to a mild flame.</span></div>
           <span class="status-display" id="hotBuffetStatus_display">FORGOTTEN ❌</span>
           <input type="hidden" id="hotBuffetStatus" name="hotBuffetStatus" value="FORGOTTEN ❌" />
         </div>
-        <div class="checklist-item" onclick="toggleItem(this)">
+        <div class="checklist-item" data-task="Put out the barbacoa">
           <div class="item-text"><span class="emoji">🍖</span><span data-i18n="barbacoa">Put out the barbacoa: Preparation for the barbacoa is done the night before (takes 8 hours to cook). Put it out in front.</span></div>
           <span class="status-display" id="barbacoaStatus_display">FORGOTTEN ❌</span>
           <input type="hidden" id="barbacoaStatus" name="barbacoaStatus" value="FORGOTTEN ❌" />
@@ -312,12 +384,12 @@
         
         <!-- Cold Foods Section -->
         <h2 data-i18n="coldFoods">Cold Foods</h2>
-        <div class="checklist-item" onclick="toggleItem(this)">
+        <div class="checklist-item" data-task="Set out cold foods">
           <div class="item-text"><span class="emoji">🥗</span><span data-i18n="setColdFoods">Set out cold foods: All cold foods from the day before (Pico De Gallo, Medium salsa, Hot salsa, Corn salsa, White cream (mantecia), Lettuce, Cheese) must be put out with new containers ready for trade-out.</span></div>
           <span class="status-display" id="setColdFoodsStatus_display">FORGOTTEN ❌</span>
           <input type="hidden" id="setColdFoodsStatus" name="setColdFoodsStatus" value="FORGOTTEN ❌" />
         </div>
-        <div class="checklist-item" onclick="toggleItem(this)">
+        <div class="checklist-item" data-task="Set out the beans">
           <div class="item-text"><span class="emoji">🫘</span><span data-i18n="setBeans">Set out the beans: Bring the beans (cooked from the night before) to the front.</span></div>
           <span class="status-display" id="setBeansStatus_display">FORGOTTEN ❌</span>
           <input type="hidden" id="setBeansStatus" name="setBeansStatus" value="FORGOTTEN ❌" />
@@ -325,22 +397,22 @@
         
         <!-- Last Minute Foods Section -->
         <h2 data-i18n="lastMinuteFoods">Last Minute Foods</h2>
-        <div class="checklist-item" onclick="toggleItem(this)">
+        <div class="checklist-item" data-task="Prepare the chicken">
           <div class="item-text"><span class="emoji">🍗</span><span data-i18n="prepareChicken">Prepare the chicken: About 30 minutes prior to opening, prepare a whole pack of chicken in front.</span></div>
           <span class="status-display" id="prepareChickenStatus_display">FORGOTTEN ❌</span>
           <input type="hidden" id="prepareChickenStatus" name="prepareChickenStatus" value="FORGOTTEN ❌" />
         </div>
-        <div class="checklist-item" onclick="toggleItem(this)">
+        <div class="checklist-item" data-task="Set out the rice">
           <div class="item-text"><span class="emoji">🍚</span><span data-i18n="setRice">Set out the rice: Add cilantro and lime to the rice and mix it before placing it out.</span></div>
           <span class="status-display" id="setRiceStatus_display">FORGOTTEN ❌</span>
           <input type="hidden" id="setRiceStatus" name="setRiceStatus" value="FORGOTTEN ❌" />
         </div>
-        <div class="checklist-item" onclick="toggleItem(this)">
+        <div class="checklist-item" data-task="Prepare the steak">
           <div class="item-text"><span class="emoji">🥩</span><span data-i18n="prepareSteak">Prepare the steak: Steak is made fresh when the first customer asks for it.</span></div>
           <span class="status-display" id="prepareSteakStatus_display">FORGOTTEN ❌</span>
           <input type="hidden" id="prepareSteakStatus" name="prepareSteakStatus" value="FORGOTTEN ❌" />
         </div>
-        <div class="checklist-item" onclick="toggleItem(this)">
+        <div class="checklist-item" data-task="Prepare the guacamole">
           <div class="item-text"><span class="emoji">🥑</span><span data-i18n="prepareGuacamole">Prepare the guacamole: Make the guacamole a couple of minutes before opening following the recipe.</span></div>
           <span class="status-display" id="prepareGuacamoleStatus_display">FORGOTTEN ❌</span>
           <input type="hidden" id="prepareGuacamoleStatus" name="prepareGuacamoleStatus" value="FORGOTTEN ❌" />
@@ -355,18 +427,69 @@
   </div>
   
   <script>
-    // When a checklist item is tapped, toggle its state and update the hidden field and display.
-    function toggleItem(item) {
-      item.classList.toggle("selected");
+    // Global variable to store the item pending unselection.
+    let currentItemToUnselect = null;
+    
+    // Attach event listeners when DOM is loaded.
+    document.addEventListener("DOMContentLoaded", function() {
+      document.querySelectorAll('.checklist-item').forEach(item => {
+        item.addEventListener('click', function(e) {
+          // Prevent multiple clicks if modal is already open.
+          if (document.getElementById("confirmationModal").style.display === "block") return;
+          handleToggle(item);
+        });
+      });
+      
+      // Modal button event listeners.
+      document.getElementById("cancelButton").addEventListener("click", cancelUnselect);
+      document.getElementById("confirmButton").addEventListener("click", confirmUnselect);
+    });
+    
+    // Handle toggle logic: if already selected, prompt confirmation for unselect; else, select immediately.
+    function handleToggle(item) {
+      if (item.classList.contains("selected")) {
+        showConfirmationModal(item);
+      } else {
+        item.classList.add("selected");
+        updateItemStatus(item, "CHECKED ✅ - " + new Date().toLocaleTimeString());
+      }
+    }
+    
+    // Update the hidden input and display span for an item.
+    function updateItemStatus(item, status) {
       const hiddenInput = item.querySelector("input[type='hidden']");
       const displaySpan = item.querySelector(".status-display");
-      if (item.classList.contains("selected")) {
-        hiddenInput.value = "CHECKED ✅";
-        displaySpan.innerText = "CHECKED ✅";
-      } else {
-        hiddenInput.value = "FORGOTTEN ❌";
-        displaySpan.innerText = "FORGOTTEN ❌";
+      hiddenInput.value = status;
+      displaySpan.innerText = status;
+    }
+    
+    // Show the confirmation modal for unselecting an item.
+    function showConfirmationModal(item) {
+      currentItemToUnselect = item;
+      const taskName = item.dataset.task || "this task";
+      document.getElementById("modalMessage").innerText = "Are you sure you'd like to remove '" + taskName + "' from your tasks completed?";
+      document.getElementById("confirmationModal").style.display = "block";
+    }
+    
+    // Confirm unselect: remove the selected state.
+    function confirmUnselect() {
+      if (currentItemToUnselect) {
+        currentItemToUnselect.classList.remove("selected");
+        updateItemStatus(currentItemToUnselect, "FORGOTTEN ❌ - " + new Date().toLocaleTimeString());
+        currentItemToUnselect = null;
       }
+      hideConfirmationModal();
+    }
+    
+    // Cancel unselect: do nothing.
+    function cancelUnselect() {
+      currentItemToUnselect = null;
+      hideConfirmationModal();
+    }
+    
+    // Hide the confirmation modal.
+    function hideConfirmationModal() {
+      document.getElementById("confirmationModal").style.display = "none";
     }
     
     // On form submission, update any hidden fields that haven't been toggled.
@@ -375,16 +498,16 @@
       const hiddenInputs = document.querySelectorAll("input[type='hidden']");
       hiddenInputs.forEach(function(input) {
         if (!input.value) {
-          input.value = "FORGOTTEN ❌";
+          input.value = "FORGOTTEN ❌ - " + new Date().toLocaleTimeString();
           const displaySpan = document.getElementById(input.id + "_display");
           if (displaySpan) {
-            displaySpan.innerText = "FORGOTTEN ❌";
+            displaySpan.innerText = "FORGOTTEN ❌ - " + new Date().toLocaleTimeString();
           }
         }
       });
     }
     
-    // Translation dictionary for the checklist page
+    // Translation dictionary for the checklist page.
     const translations = {
       en: {
         headerTitle: "Morning Checklist",
@@ -409,7 +532,8 @@
         setRice: "Set out the rice: Add cilantro and lime to the rice and mix it before placing it out.",
         prepareSteak: "Prepare the steak: Steak is made fresh when the first customer asks for it.",
         prepareGuacamole: "Prepare the guacamole: Make the guacamole a couple of minutes before opening following the recipe.",
-        submitChecklist: "Submit Checklist"
+        submitChecklist: "Submit Checklist",
+        name: "Name"
       },
       es: {
         headerTitle: "Lista de Verificación de la Mañana",
@@ -428,13 +552,14 @@
         boilBeans: "Lleva los frijoles a ebullición: Prepara los frijoles y llévalos a hervir.",
         hotBuffet: "Prepara el buffet caliente: Llena el lado caliente del buffet con agua nueva del fregadero, enciende el gas de la estufa y enciende. Lleva a una temperatura de vapor, luego reduce a una llama suave.",
         barbacoa: "Saca la barbacoa: La preparación de la barbacoa se hace la noche anterior (toma 8 horas cocinarla). Colócala al frente.",
-        setColdFoods: "Coloca los alimentos fríos: Todos los alimentos fríos del día anterior (Pico de Gallo, salsa mediana, salsa picante, salsa de maíz, crema blanca (mantecia), lechuga, queso) deben estar listos con nuevos contenedores para el cambio.",
+        setColdFoods: "Coloca los alimentos fríos: Todos los alimentos fríos del día anterior (Pico De Gallo, salsa mediana, salsa picante, salsa de maíz, crema blanca (mantecia), lechuga, queso) deben estar listos con nuevos contenedores para el cambio.",
         setBeans: "Coloca los frijoles: Lleva los frijoles (cocinados la noche anterior) al frente.",
         prepareChicken: "Prepara el pollo: Aproximadamente 30 minutos antes de abrir, prepara un paquete completo de pollo al frente.",
         setRice: "Coloca el arroz: Añade cilantro y lima al arroz y mézclalo antes de ponerlo a la vista.",
         prepareSteak: "Prepara el bistec: El bistec se prepara fresco cuando el primer cliente lo pide.",
         prepareGuacamole: "Prepara el guacamole: Haz el guacamole un par de minutos antes de abrir siguiendo la receta.",
-        submitChecklist: "Enviar Lista"
+        submitChecklist: "Enviar Lista",
+        name: "Nombre"
       }
     };
     
@@ -457,7 +582,7 @@
     });
     updateLanguage(currentLanguage);
     
-    // Theme toggle: switch between day and night mode
+    // Theme toggle: switch between day and night mode.
     document.getElementById('theme-toggle').addEventListener('change', function () {
       const themeLabel = document.getElementById('theme-label');
       if (this.checked) {
@@ -477,10 +602,10 @@
       const hiddenInputs = document.querySelectorAll("input[type='hidden']");
       hiddenInputs.forEach(function(input) {
         if (!input.value) {
-          input.value = "FORGOTTEN ❌";
+          input.value = "FORGOTTEN ❌ - " + new Date().toLocaleTimeString();
           const displaySpan = document.getElementById(input.id + "_display");
           if (displaySpan) {
-            displaySpan.innerText = "FORGOTTEN ❌";
+            displaySpan.innerText = "FORGOTTEN ❌ - " + new Date().toLocaleTimeString();
           }
         }
       });
